@@ -6,10 +6,10 @@ exports.seed = async function(knex) {
   // Deletes ALL existing entries
   await knex('bases').del()
   await knex('bases').insert([
-    {base: 'Buckley SFB'},
-    {base: 'Peterson SFB'},
-    {base: 'Schriever SFB'},
-    {base: 'Vandenberg SFB'},
-    {base: 'Fort Carson'}
+    {name: 'Buckley SFB'},
+    {name: 'Peterson SFB'},
+    {name: 'Schriever SFB'},
+    {name: 'Vandenberg SFB'},
+    {name: 'Fort Carson'}
   ]);
 };

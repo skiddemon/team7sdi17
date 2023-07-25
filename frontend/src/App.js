@@ -1,23 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/home/header.js'
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Header />
+        <img className="bg-scroll h-full max-w-full" src="https://wallpaperaccess.com/full/1087589.jpg" alt="home page empty gym"></img>
     </div>
   );
 }

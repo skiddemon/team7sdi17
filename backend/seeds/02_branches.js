@@ -6,11 +6,11 @@ exports.seed = async function(knex) {
   // Deletes ALL existing entries
   await knex('branches').del()
   await knex('branches').insert([
-    {branch: 'Space Force'},
-    {branch: 'Air Force'},
-    {branch: 'Army'},
-    {branch: 'Navy'},
-    {branch: 'Marines'},
-    {branch: 'Coast Guard'}
+    {name: 'Space Force'},
+    {name: 'Air Force'},
+    {name: 'Army'},
+    {name: 'Navy'},
+    {name: 'Marines'},
+    {name: 'Coast Guard'}
   ]);
 };
