@@ -8,14 +8,14 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      host: 'database',
+      host: '127.0.0.1',
       user: 'postgres',
       password: 'docker',
       port: 5432,
       database: 'fitnessdb'
     }
   },
-  
+
   staging: {
     client: 'postgresql',
     connection: {
