@@ -5,7 +5,8 @@ const SignIn = ({setIsSignInModal}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = () => {
+  const handleSignIn = (e) => {
+    e.preventDefault();
     alert(`username: ${username}, password: ${password}`);
   }
 
@@ -16,8 +17,8 @@ const SignIn = ({setIsSignInModal}) => {
           <h1 className="flex w-full justify-center">Sign In</h1>
           <p className="cursor-pointer" onClick={() => setIsSignInModal(false)}>X</p>
         </div>
-        <form>
-          <div class="mb-6">
+        <form onSubmit={handleSignIn}>
+          <div className="mb-6">
             <Label htmlFor="username" value="Username" />
             <TextInput
               id="username"
@@ -28,7 +29,7 @@ const SignIn = ({setIsSignInModal}) => {
               required
               />
           </div>
-          <div class="mb-6">
+          <div className="mb-6">
             <Label htmlFor="password" value="Password" />
             <TextInput
               id="password"
@@ -40,7 +41,7 @@ const SignIn = ({setIsSignInModal}) => {
               />
           </div>
           <div className="flex justify-center">
-            <Button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={handleSignIn}>Submit</Button>
+            <Button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</Button>
           </div>
         </form>
       </Card>
