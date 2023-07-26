@@ -49,16 +49,17 @@ app.post('/users', async (req, res) => {
   }
 
   try {
-     console.log('do we even get this far?')
+    //  console.log('do we even get this far?')
     const addedUserResponse = await knex('users')
       .insert(newUser)
       .returning('*')
       
     console.log('user response: ', addedUserResponse)
 
-    addedUserResponse = addedUserResponse.map((e) => {
-      delete e.password
-    })
+    delete addedUserResponse.password
+    // addedUserResponse = addedUserResponse.map((e) => {
+    //   delete e.password
+    // })
     res.status(201).json(addedUserResponse)
   } catch (err) {
     res.status(500).json(err.message)
