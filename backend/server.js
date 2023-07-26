@@ -86,7 +86,16 @@ app.get('/bases', async (req, res) => {
     res.status(500).json({ message: 'Failed to retrieve bases data.' })
   }
 })
-
+//////////////////////// EXERCISES ROUTE ///////////////////////////////
+app.get('/exercises', async(req, res) => {
+  try {
+    const exercises = await knex('exercises')
+      .select("*")
+      res.status(201).json(exercises)
+  } catch (err) {
+        res.status(500).json({ message: 'Failed to retrieve exercises data.' })
+  }
+})
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
