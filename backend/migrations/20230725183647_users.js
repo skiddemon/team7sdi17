@@ -7,7 +7,8 @@ exports.up = function(knex) {
     table.increments('id').primary;
     table.string('first_name');
     table.string('last_name');
-    table.string('username').unique();
+    table.string('email').unique().notNullable();
+    table.string('user_name').unique();
     table.string('password');
     table.integer('branch_id');
     table.foreign('branch_id').references('branches.id');
