@@ -1,0 +1,43 @@
+git clone "git@github.com:KERBALlang/CRUD_APP_PROJ.git"
+cd CRUD_APP_PROJ
+mkdir frontend
+mkdir backend
+cd frontend
+npx create-react-app app
+cd ..
+cd backend
+npm install express
+npm install nodemon
+npm install postman
+npm install postgres
+cd ..
+touch README.txt
+touch STEPS_taken.txt
+git add *
+git commit -m "added a frontend and backend with react, express, nodemon, postman, and postgres"
+git push
+cd backend
+npm start
+##################### NEW TERMINAL ###########
+cd frontend/app
+npm start
+##################### NEW TERMINAL ###########
+cd backend
+npm i experess pg knex
+npx knex init
+docker pull postgres
+mkdir -p $HOME/kerbal/docker/volumes/postgres
+docker run --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v $HOME/kerbal/docker/volumes/postgres:/var/lib/postgresql/data postgres
+ npx knex migrate:make create_User_table
+ npx knex migrate:make create_Item_table
+ docker ps -a 
+ docker exec -it ba bash
+ postgres --version
+ psql -U postgres
+ SELECT version();
+ ctrl+d 
+ ctrl+d
+ npx knex seed:make users;
+ npx knex seed:make items;
+ npx knex migrate:latest;
+ #########################
