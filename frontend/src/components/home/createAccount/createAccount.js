@@ -1,7 +1,7 @@
 import { Button, Card, Label, TextInput, Dropdown } from 'flowbite-react';
 import { useState, useEffect } from 'react';
 
-export default function CreateAccount({ setIsOpenModal }) {
+export default function CreateAccount({ setIsOpenModal, setIsCreatedModal }) {
   //////GLOBAL STATES///////
   const [first_name, setFirstName] = useState('')
   const [last_name, setLastName] = useState('')
@@ -15,6 +15,7 @@ export default function CreateAccount({ setIsOpenModal }) {
   const [baseId, setBaseId] = useState(null);
   const [branchId, setBranchId] = useState(null)
   const [branches, setBranches] = useState([])
+  const [passCheck, setPassCheck] = useState(false)
 
   //////GLOBAL VARIABLES///////
   const List = ({ element, set, set2 }) => {
@@ -51,20 +52,23 @@ export default function CreateAccount({ setIsOpenModal }) {
       branch_id: branchId,
       base_id: baseId
     }
-
-    const response = await fetch(`http://localhost:8080/users`, {
+    if(password === verifyPassword){
+    await fetch(`http://localhost:8080/users`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
       },
       body: JSON.stringify(newUser)
-    });
+    })
+    .then(res => res.json())
+    .then(data => {setIsOpenModal(false); setIsCreatedModal(true)})
 
-    return response.json();
-
+  }else{
+    setPassCheck(true)
+  }
     //step 2:  Verify fields aren't empty
     //step 3:  Verify fields are correct type
-    //step 4:  Redirect user to user's page
+    //step 4:  Redirect user to login 
   }
   ////// THE RETURN STATEMENT: THE WORK ///////
   return (
@@ -74,6 +78,7 @@ export default function CreateAccount({ setIsOpenModal }) {
           <h1 className="flex w-full justify-center">Create Account</h1>
           <p className="cursor-pointer" onClick={() => setIsOpenModal(false)}>X</p>
         </div>
+        {passCheck && <p className="text-center text-red-500">Passwords Must Match</p>}
         <form onSubmit={handleCreateAccount}>
           <div className="mb-6">
             <Label htmlFor="first_name" value="First Name" />

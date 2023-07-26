@@ -1,13 +1,12 @@
-import Header from './components/home/header.js'
-
+import Home from './components/home/home.js';
 
 function App() {
   return (
-    <div className="App">
-        <Header />
-        <img className="bg-scroll h-screen w-screen" src="https://wallpaperaccess.com/full/1087589.jpg" alt="home page empty gym"></img>
+    <div className="App h-screen w-screen" style={{backgroundImage: "url('https://wallpaperaccess.com/full/1087589.jpg')", backgroundSize: "cover", backgroundPosition: "center"}}>
+        <Home />
     </div>
   );
 }
 
 export default App;
+
