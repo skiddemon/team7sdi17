@@ -1,40 +1,51 @@
 const express = require('express')
 const cors = require('cors')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const knex = require('knex')(require('./knexfile.js')["development"])
 const app = express()
 const port = 8080;
 
 app.use(express.json())
 app.use(cors())
+
+const JWT_SECRET = "THIS IS A SECRET"
 //////////////////////// MAIN ROUTE ///////////////////////////////
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 //////////////////////// LOGIN ROUTE ///////////////////////////////
 app.post('/login', async (req, res) => {
-  const {username, password} = req.body
-  console.log(username, password)
+  const { username, password } = req.body
+  console.log(`User ${username} is attempting to login`)
 
-  try{
+  try {
     const user = await knex('users')
-    .select('id', 'user_name', 'password')
-    .where('user_name', username)
-    .first()
+      .select('id', 'user_name', 'password')
+      .where('user_name', username)
+      .first()
 
-    if(user){
+    if (user) {
       const isPasswordValid = bcrypt.compareSync(password, user.password);
+      console.log('bcrypt:', isPasswordValid)
 
-      if(isPasswordValid){
-        res.status(201).json({id: user.id, username: user.username, token: 8675309})
-      }else{
-        res.status(401).json({id: ''})
+      if (isPasswordValid) {
+        console.log(`User ${username} has successfully logged in`)
+
+        const token = jwt.sign({ user: user.user_name }, JWT_SECRET)
+        const user_name = user.user_name
+        res.status(201).json({ token, user_name })
+      } else {
+        console.log(`User ${username} failed authentication`)
+        res.status(401).json({ message: "Failed to authenticate." })
       }
-    }else{
-      res.status(401).json({id:''})
+    } else {
+      console.log('User does not exist')
+      res.status(401).json({ message: "Failed to authenticate" })
     }
-  }catch(err){
-    res.status(500).json({message: "Failed to find user."})
+  } catch (err) {
+    console.log(`Fetch request failed.  Invalid user input`)
+    res.status(500).json({ message: "Failed Request" })
   }
 })
 
@@ -115,13 +126,13 @@ app.get('/bases', async (req, res) => {
   }
 })
 //////////////////////// EXERCISES ROUTE ///////////////////////////////
-app.get('/exercises', async(req, res) => {
+app.get('/exercises', async (req, res) => {
   try {
     const exercises = await knex('exercises')
       .select("*")
-      res.status(201).json(exercises)
+    res.status(201).json(exercises)
   } catch (err) {
-        res.status(500).json({ message: 'Failed to retrieve exercises data.' })
+    res.status(500).json({ message: 'Failed to retrieve exercises data.' })
   }
 })
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
