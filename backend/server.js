@@ -1,8 +1,10 @@
+const { getExercisesWithCategories } = require('./db/controllers.js');
+
 const express = require('express')
 const cors = require('cors')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const knex = require('knex')(require('./knexfile.js')["development"])
+const knex = require('./db/dbConnection.js')
 const app = express()
 const port = 8080;
 
@@ -178,10 +180,9 @@ app.get('/bases', async (req, res) => {
   }
 })
 //////////////////////// EXERCISES ROUTE ///////////////////////////////
-app.get('/exercises', async (req, res) => {
+app.get('/exercises', authenticateToken, async (req, res) => {
   try {
-    const exercises = await knex('exercises')
-      .select("*")
+    const exercises = await getExercisesWithCategories();
     res.status(201).json(exercises)
   } catch (err) {
     res.status(500).json({ message: 'Failed to retrieve exercises data.' })

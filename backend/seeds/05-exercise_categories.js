@@ -4,8 +4,8 @@
  */
 exports.seed = async function(knex) {
   // Deletes ALL existing entries
-  await knex('exercise-categories').del()
-  await knex('exercise-categories').insert([
+  await knex('exercise_categories').del()
+  await knex('exercise_categories').insert([
     {name: 'Strength'},
     {name: 'Cardio'},
     {name: 'Plyometric'}
