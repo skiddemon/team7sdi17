@@ -27,12 +27,11 @@ export default function UserPage() {
     }, [])
     
 
-    const items = exercises.map((e)=>{
-        <Dropdown.Item key={e.id} onClick={()=>{}}>{e.name}</Dropdown.Item>
+    const exercise_dropdown_items = exercises.map((e)=>{
+        return <Dropdown.Item key={e.id} onClick={()=>{}}>{e.name}</Dropdown.Item>
     })
 
     return (
-
         <div className="text-red-500g">
             <header className='w-full h-20 bg-yellow-100'>
                 <h1>header</h1>
@@ -45,7 +44,7 @@ export default function UserPage() {
                             Select Exercise
                         </span>
                     </Dropdown.Header>
-                    {items.length > 0 && items}
+                    {exercise_dropdown_items.length > 0 && exercise_dropdown_items}
                 </Dropdown>
                 <div alt='select an exercise' className='w-full'>
                     {/* to do app flavor  */}
