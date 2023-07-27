@@ -9,15 +9,44 @@ const port = 8080;
 app.use(express.json())
 app.use(cors())
 
+//this must be in a .env file
 const JWT_SECRET = "THIS IS A SECRET"
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
+
+
+
 //////////////////////// MAIN ROUTE ///////////////////////////////
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send(`
+  <a href='http://localhost:8080/login'>Login Page (Currently no GET routes but it does exist)</a>
+  <br></br>
+  <a href='http://localhost:8080/users'>Users Page</a>
+  <br></br>
+  <a href='http://localhost:8080/branches'>Branches Page</a>
+  <br></br>
+  <a href='http://localhost:8080/roles'>Roles Page</a>
+  <br></br>
+  <a href='http://localhost:8080/bases'>Bases Page</a>
+  <br></br>
+  <a href='http://localhost:8080/exercises'>Exercises Page</a>
+  <br></br>
+  `)
 })
 //////////////////////// LOGIN ROUTE ///////////////////////////////
 app.post('/login', async (req, res) => {
   const { username, password } = req.body
-  console.log(`User ${username} is attempting to login`)
+  console.log(`User '${username}' is attempting to login`)
 
   try {
     const user = await knex('users')
@@ -30,13 +59,13 @@ app.post('/login', async (req, res) => {
       console.log('bcrypt:', isPasswordValid)
 
       if (isPasswordValid) {
-        console.log(`User ${username} has successfully logged in`)
+        console.log(`User '${username}' has successfully logged in`)
 
-        const token = jwt.sign({ user: user.user_name }, JWT_SECRET)
+        const token = jwt.sign({ user: user.user_name }, JWT_SECRET, {expiresIn: '1h'})
         const user_name = user.user_name
         res.status(201).json({ token, user_name })
       } else {
-        console.log(`User ${username} failed authentication`)
+        console.log(`User '${username}' failed authentication`)
         res.status(401).json({ message: "Failed to authenticate." })
       }
     } else {
@@ -105,6 +134,29 @@ app.post('/users', async (req, res) => {
   }
 
 })
+
+///////////////////// SPECIFIC USER ROUTE ////////////////////////
+app.get('/user/:specificuser', authenticateToken, async (req, res) => {
+  // authenticateToken function has already verified user at this point
+  const specificUserName = req.params.specificuser
+  console.log(req.user.user)
+
+  console.log(`User '${specificUserName}' has authenticated their token.`)
+  if(req.user.user === specificUserName){
+  try {
+    const userInfo = await knex.select('*').from('users').where({ user_name: specificUserName })
+    userInfo.map((e) => {
+      delete e.password
+    })
+    res.status(201).json(userInfo)
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve users data.' })
+  }
+}else{
+  res.status(500).json({message: 'Failed'})
+}
+})
+
 
 //////////////////////// ROLES ROUTE ///////////////////////////////
 app.get('/roles', async (req, res) => {
