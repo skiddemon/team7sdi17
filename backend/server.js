@@ -187,6 +187,29 @@ app.get('/exercises', async (req, res) => {
     res.status(500).json({ message: 'Failed to retrieve exercises data.' })
   }
 })
+
+app.post('/exercises', async (req, res) => {
+  const {name} = req.body;
+  console.log(req.body)
+  const newExercise = {
+   name: name
+  }
+
+  try {
+    console.log('do we even get this far?')
+    const addedExercisesResponse = await knex('exercises')
+      .insert(newExercise)
+      .returning('*')
+
+    console.log('exercise response: ', addedExercisesResponse)
+    res.status(201).json(addedExercisesResponse)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+
+})
+
+
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
