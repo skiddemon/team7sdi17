@@ -7,7 +7,16 @@ const SignIn = ({setIsSignInModal}) => {
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    alert(`username: ${username}, password: ${password}`);
+    fetch('http://localhost:8080/login', {
+      method: "POST",
+      headers: {"Content-type": "application/json"},
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
   }
 
   return (
@@ -25,7 +34,7 @@ const SignIn = ({setIsSignInModal}) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Username"
-              type="email"
+              type="text"
               required
               />
           </div>

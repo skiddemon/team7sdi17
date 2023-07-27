@@ -11,6 +11,34 @@ app.use(cors())
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+//////////////////////// LOGIN ROUTE ///////////////////////////////
+app.post('/login', async (req, res) => {
+  const {username, password} = req.body
+  console.log(username, password)
+
+  try{
+    const user = await knex('users')
+    .select('id', 'user_name', 'password')
+    .where('user_name', username)
+    .first()
+
+    if(user){
+      const isPasswordValid = bcrypt.compareSync(password, user.password);
+
+      if(isPasswordValid){
+        res.status(201).json({id: user.id, username: user.username, token: 8675309})
+      }else{
+        res.status(401).json({id: ''})
+      }
+    }else{
+      res.status(401).json({id:''})
+    }
+  }catch(err){
+    res.status(500).json({message: "Failed to find user."})
+  }
+})
+
+
 //////////////////////// BRANCHES ROUTE ///////////////////////////////
 app.get('/branches', async (req, res) => {
   try {
@@ -53,7 +81,7 @@ app.post('/users', async (req, res) => {
     const addedUserResponse = await knex('users')
       .insert(newUser)
       .returning('*')
-      
+
     console.log('user response: ', addedUserResponse)
 
     delete addedUserResponse.password
