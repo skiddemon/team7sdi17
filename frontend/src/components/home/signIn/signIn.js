@@ -24,7 +24,6 @@ const SignIn = ({ setIsSignInModal }) => {
       .then(data => {
         if (data.token) {
           Cookies.set('token', data.token)
-          // Cookies.set('user', data.username)
           console.log(data)
           Navigate(`/user/${data.user_name}`)
         } else {

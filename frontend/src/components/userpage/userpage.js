@@ -1,10 +1,50 @@
+
 import { Button, Card, Label, TextInput, Dropdown } from 'flowbite-react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+
 
 export default function UserPage() {
+
     const [exercises, setExercises] = useState([]);
+    const [userData, setUserData] = useState([])
+    const Navigate = useNavigate()
+    const token = Cookies.get('token')
+    const user = useParams().username
+    
+    useEffect(() => {
+        if(!token){
+            Navigate('/')
+        }else{
+            try{
+                fetch(`http://localhost:8080/user/${user}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then(res => {
+                    if(!res.ok){
+                        console.log('if(!res.ok)')
+                        Navigate('/')
+                    }else{
+                        console.log('else')
+                    return res.json()
+                    }
+                })
+                .then(data => {
+                    console.log('test')
+                    console.log(data); 
+                    setUserData(data)
+                })
+            }catch(err){
+                console.error('Failed to fetch')
+            }
+    }
+    }, [token, user])
+
 
 
     //Drop Down w/ Exercises
@@ -18,6 +58,10 @@ export default function UserPage() {
     // make seed exercise_categories with the three categories we talked about, plyometric, cardio, strength, ((npx knex seed:06-exercise_categories))
     // modify dt exercises seed to include the field for exercise_categories foriegn key, and modify dropforign key before drop table (())
     // rollback, then migrate latest, seed run
+  
+  
+  
+    //TODO: Apply token check to the following useEffect:
 
     useEffect(() => {
         fetch('http://localhost:8080/exercises')
