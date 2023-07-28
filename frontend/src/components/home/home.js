@@ -1,8 +1,8 @@
 import { Card, Button } from 'flowbite-react'
 import React, { useState } from 'react'
-import CreateAccount from './createAccount/createAccount.js'
-import SignIn from './signIn/signIn.js'
-import AccountCreated from './createAccount/accountCreated.js'
+import CreateAccount from './createAccountModal/createAccount.js'
+import SignIn from './signInModal/signIn.js'
+import AccountCreated from './createAccountModal/accountCreated.js'
 
 export default function Home() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -14,7 +14,6 @@ export default function Home() {
       {isOpenModal && (<CreateAccount setIsOpenModal={setIsOpenModal} setIsCreatedModal={setIsCreatedModal} />)}
       {isSignInModal && (<SignIn setIsSignInModal={setIsSignInModal} />)}
       {isCreatedModal && (<AccountCreated setIsCreatedModal={setIsCreatedModal} setIsSignInModal={setIsSignInModal} />)}
-
       <Card>
         <div className="flex items-center justify-between">
           <h1 className="w-fit">Final Project</h1>
