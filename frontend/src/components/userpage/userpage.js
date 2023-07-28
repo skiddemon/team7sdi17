@@ -5,6 +5,11 @@ import { useNavigate, useParams, Route, Routes } from 'react-router-dom'
 import Exercise from '../exercise/exercise'
 
 export default function UserPageMain({userData, exercises}){
+  const [exercisesToLog, setExercisesToLog] = useState([{}]);
+  
+  const handleAddExercise = () => {
+    setExercisesToLog((prevState) => [...prevState, {}]);
+  }
 
   const Navigate = useNavigate();
 
@@ -18,18 +23,33 @@ export default function UserPageMain({userData, exercises}){
     return <p>Loading....</p>
   }
 
+
+  const renderExerciseComponents = () => {
+    return exercisesToLog.map((e) => <Exercise exercises={exercises}/>)
+  }
+
   return (
     <div className="text-red-500g">
-
+//       <header className='flex flex-end flex-row justify-end align-middle w-full h-20 bg-yellow-100 bg-opacity-25'>
+        
+//         <div className="flex gap-10 m-auto mr-4">
+//           <Button onClick={() => {Cookies.remove('token'); Navigate('/')}}>Sign Out</Button>
+//           {userData[0].role_id === 1 && (<Button onClick={() => Navigate('adminTools')}>Admin Page</Button>)}
+//         </div>
+//       </header>
       <div className='w-full h-4/5 bg-green-200'>
         <h1>RECORD NEW WORKOUT</h1>
-        <Exercise exercises={exercises} />
+        
         <div alt='selected exercise' className='w-full'>
-          {/* to do app flavor  */}
+        {renderExerciseComponents()}
+        <div className="addExerciseButtonContainer flex h-auto w-full p-4">
+            <Button onClick={handleAddExercise} className="addExerciseButton flex h-120 w-15 text-6xl justify-center align-middle shadow-[4px_4px_10px_black] bg-[white] m-auto rounded-[15px] ease-in-out">+
+            </Button>
+        </div>
         </div>
         <div alt='selected exercises' className='w-full'>
-          <h1>THESE ARE THE RECORDED EXERCISES</h1>
-          {/* to do app flavor  */}
+          <h1>THESE ARE THE SELECTED EXERCISES</h1>
+         
         </div>
       </div>
       <footer className='w-full h-20 bg-indigo-200'>
