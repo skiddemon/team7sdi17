@@ -1,37 +1,137 @@
-const Exercise = () => {
+import {Dropdown, Label, TextInput} from 'flowbite-react';
+import {useState} from 'react';
+
+const Exercise = ({exercises}) => {
+    const [selectedExercise, setSelectedExercise] = useState(null);
+    const [weight, setWeight] = useState(0);
+    const [numSets, setNumSets] = useState(0);
+    const [reps, setReps] = useState(0);
+    const [distance, setDistance] = useState(0);
+    const [split, setSplit] = useState('');
+    const [comment, setComment] = useState('');
+
+    const exercise_dropdown_items = exercises.map((e)=>{
+        return <Dropdown.Item key={e.id} onClick={()=>{setSelectedExercise(e);}}>{e.exercise_name}</Dropdown.Item>
+    })
 
     return(
-        // a thin wide card, height~4rem, width~full, from left to right(<h3>name</h3>,<input>sets</input>, <input>reps</input>, <button>submit</button> )
-        
-        <div alt="Record New Workout Container"
-            className="block rounded-lg bg-white dark:bg-neutral-700">
-            <div  alt="Exercise Card"
-                class="m-6">
-                Featured
+        <>
+            <Dropdown label={selectedExercise?.exercise_name} alt="Exercises">
+                <Dropdown.Header>
+                    <span className="block text-sm">
+                        Select Exercise
+                    </span>
+                </Dropdown.Header>
+                {exercise_dropdown_items.length > 0 && exercise_dropdown_items}
+            </Dropdown>
+            <div class="exerciseCard flex flex-row justify-around h-20 w-11/12 align-middle min-w-[400px] align-middle bg-[gray] text-center shadow-[4px_4px_10px_black] m-2 p-[3px] rounded-[10px]">
+                <h3 class="flex m-auto">{selectedExercise?.exercise_name}</h3>
+                <Label htmlFor='weight' value='Weight' className='flex m-auto'/>
+                <TextInput 
+                    id='weight'
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                    placeholder='0'
+                    type='number'
+                    alt='weight input'
+                    className='flex m-auto'
+                />
+                <Label htmlFor='sets' value='Sets' className='flex m-auto'/>
+                <TextInput 
+                    id='sets'
+                    value={numSets}
+                    onChange={(e) => setNumSets(e.target.value)}
+                    placeholder='0'
+                    type='number'
+                    alt='sets input'
+                    className='flex m-auto'
+                />
+                <Label htmlFor='reps' value='Reps' className='flex m-auto'/>
+                <TextInput 
+                    id='reps'
+                    value={reps}
+                    onChange={(e) => setReps(e.target.value)}
+                    placeholder='0'
+                    type='number'
+                    alt='reps input'
+                    className='flex m-auto'
+                />
+                <Label htmlFor='distance' value='Distance' className='flex m-auto' />
+                <TextInput 
+                    id='distance'
+                    value={distance}
+                    onChange={(e) => setDistance(e.target.value)}
+                    placeholder='0'
+                    type='number'
+                    alt='distance input'
+                    className='flex m-auto'
+                />
+                <Label htmlFor='split' value='Split' className='flex m-auto' />
+                <TextInput
+                    id='split'
+                    value={split}
+                    onChange={(e) => setSplit(e.target.value)}
+                    placeholder='0'
+                    type='number'
+                    alt='split input'
+                    className='flex m-auto'
+                />
+                <Label htmlFor='comment' value='Comment' className='flex m-auto' />
+                <TextInput
+                id='comment'
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder='your texct heree'
+                    type='text'
+                    alt='Comment input'
+                    className='flex m-auto'
+                    />
+                
+                <button type="button" class="flex focus:outline-none m-auto text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
             </div>
-            <div class="p-6">
-                <h5
-                class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-                Special title treatment
-                </h5>
-                <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-                With supporting text below as a natural lead-in to additional
-                content.
-                </p>
-                <button
-                type="button"
-                class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                data-te-ripple-init
-                data-te-ripple-color="light">
-                Button
-                </button>
-            </div>
-            <div
-                class="border-t-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
-                2 days ago
-            </div>
-            </div>
+        </>
     )
 };
 
 export default Exercise;
+
+{/* 
+<form class="exerciseCardContainer">
+  <div class="addExerciseButtonContainer">
+    <button class="addExerciseButton">
+    +
+    </button>
+  </div>
+  <div class="exerciseCard">
+  
+    <div class="exerciseName">
+      <h3>seated osfdgggfsdfdgverhead row</h3>
+    </div>
+    
+    <div class="exerciseInputsStrengthContainer">
+      
+      <div class="weightContainer">
+        <label for="weight">Weight</label>
+        <input class="exerciseInput" type="number" name="weight">
+      </div>
+    //   strength
+    </div>
+    <div class="commentContainer">
+          <label for="comment">Comment</label>
+          <input class="exerciseComment" type="textarea" name="comment">
+    </div> 
+    <div class="setsContainer">
+        <label for="sets">Sets</label>
+        <input class="exerciseInput" type="number" name="sets">
+    </div>
+    <div class="repsContainer">
+        <label for="reps">Reps</label>
+        <input class="exerciseInput" type="number" name="reps">
+    </div>
+    <div class="submitButtonContainer">
+    <button class="submitLogButton">
+    log workout
+    </button>
+  </div>
+</form>
+     */}

@@ -69,6 +69,7 @@ export default function CreateAccount({ setIsOpenModal, setIsCreatedModal }) {
     //step 2:  Verify fields aren't empty
     //step 3:  Verify fields are correct type
     //step 4:  Redirect user to login 
+    
   }
   ////// THE RETURN STATEMENT: THE WORK ///////
   return (
