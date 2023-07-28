@@ -16,26 +16,59 @@ const Exercise = ({exercises}) => {
 
     return(
         <>
-            <Dropdown label={selectedExercise?.exercise_name} alt="Exercises">
-                <Dropdown.Header>
-                    <span className="block text-sm">
-                        Select Exercise
-                    </span>
-                </Dropdown.Header>
-                {exercise_dropdown_items.length > 0 && exercise_dropdown_items}
-            </Dropdown>
-            <div class="exerciseCard flex flex-row justify-around h-20 w-11/12 align-middle min-w-[400px] align-middle bg-[gray] text-center shadow-[4px_4px_10px_black] m-2 p-[3px] rounded-[10px]">
-                <h3 class="flex m-auto">{selectedExercise?.exercise_name}</h3>
-                <Label htmlFor='weight' value='Weight' className='flex m-auto'/>
-                <TextInput 
-                    id='weight'
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                    placeholder='0'
-                    type='number'
-                    alt='weight input'
-                    className='flex m-auto'
-                />
+        
+                <div class="exerciseCard flex flex-row justify-around h-20 w-11/12 align-middle min-w-[400px] align-middle bg-[gray] text-center shadow-[4px_4px_10px_black] m-2 p-[3px] rounded-[10px]">
+                <Dropdown label={
+                    selectedExercise ? selectedExercise?.exercise_name : 'Select an Exercise'
+                } alt="Exercises" className='flex m-auto'>
+                    <Dropdown.Header>
+                        <span className="block text-sm">
+                            Select Exercise
+                        </span>
+                    </Dropdown.Header>
+                    {exercise_dropdown_items.length > 0 && exercise_dropdown_items}
+                </Dropdown>
+                
+                {selectedExercise?.category_name === 'Strength' &&
+                    <>
+                        <Label htmlFor='weight' value='Weight' className='flex m-auto'/>
+                        <TextInput 
+                            id='weight'
+                            value={weight}
+                            onChange={(e) => setWeight(e.target.value)}
+                            placeholder='0'
+                            type='number'
+                            alt='weight input'
+                            className='flex m-auto'
+                        />
+                    </>
+                }
+                
+                {selectedExercise?.category_name === 'Cardio' && 
+                    <>
+                        <Label htmlFor='distance' value='Distance' className='flex m-auto' />
+                        <TextInput 
+                            id='distance'
+                            value={distance}
+                            onChange={(e) => setDistance(e.target.value)}
+                            placeholder='0'
+                            type='number'
+                            alt='distance input'
+                            className='flex m-auto'
+                        />
+                        <Label htmlFor='split' value='Split' className='flex m-auto' />
+                        <TextInput
+                            id='split'
+                            value={split}
+                            onChange={(e) => setSplit(e.target.value)}
+                            placeholder='0'
+                            type='number'
+                            alt='split input'
+                            className='flex m-auto'
+                        />
+                    </>
+                }
+                
                 <Label htmlFor='sets' value='Sets' className='flex m-auto'/>
                 <TextInput 
                     id='sets'
@@ -56,82 +89,22 @@ const Exercise = ({exercises}) => {
                     alt='reps input'
                     className='flex m-auto'
                 />
-                <Label htmlFor='distance' value='Distance' className='flex m-auto' />
-                <TextInput 
-                    id='distance'
-                    value={distance}
-                    onChange={(e) => setDistance(e.target.value)}
-                    placeholder='0'
-                    type='number'
-                    alt='distance input'
-                    className='flex m-auto'
-                />
-                <Label htmlFor='split' value='Split' className='flex m-auto' />
-                <TextInput
-                    id='split'
-                    value={split}
-                    onChange={(e) => setSplit(e.target.value)}
-                    placeholder='0'
-                    type='number'
-                    alt='split input'
-                    className='flex m-auto'
-                />
                 <Label htmlFor='comment' value='Comment' className='flex m-auto' />
                 <TextInput
                 id='comment'
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                    placeholder='your texct heree'
+                    placeholder='How did it go?'
                     type='text'
                     alt='Comment input'
                     className='flex m-auto'
                     />
-                
+                <button type="button" class="flex focus:outline-none m-auto text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">EDIT</button>
                 <button type="button" class="flex focus:outline-none m-auto text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
             </div>
+           
         </>
     )
 };
 
 export default Exercise;
-
-{/* 
-<form class="exerciseCardContainer">
-  <div class="addExerciseButtonContainer">
-    <button class="addExerciseButton">
-    +
-    </button>
-  </div>
-  <div class="exerciseCard">
-  
-    <div class="exerciseName">
-      <h3>seated osfdgggfsdfdgverhead row</h3>
-    </div>
-    
-    <div class="exerciseInputsStrengthContainer">
-      
-      <div class="weightContainer">
-        <label for="weight">Weight</label>
-        <input class="exerciseInput" type="number" name="weight">
-      </div>
-    //   strength
-    </div>
-    <div class="commentContainer">
-          <label for="comment">Comment</label>
-          <input class="exerciseComment" type="textarea" name="comment">
-    </div> 
-    <div class="setsContainer">
-        <label for="sets">Sets</label>
-        <input class="exerciseInput" type="number" name="sets">
-    </div>
-    <div class="repsContainer">
-        <label for="reps">Reps</label>
-        <input class="exerciseInput" type="number" name="reps">
-    </div>
-    <div class="submitButtonContainer">
-    <button class="submitLogButton">
-    log workout
-    </button>
-  </div>
-</form>
-     */}
