@@ -24,7 +24,6 @@ const SignIn = ({ setIsSignInModal }) => {
       .then(data => {
         if (data.token) {
           Cookies.set('token', data.token)
-          console.log(data)
           Navigate(`/user/${data.user_name}`)
         } else {
           setAuthFail(true)

@@ -1,8 +1,8 @@
-
 import { Button, Card, Label, TextInput, Dropdown } from 'flowbite-react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie'
 import { useNavigate, useParams } from 'react-router-dom'
+import Exercise from '../exercise/exercise'
 
 
 export default function UserPage() {
@@ -13,6 +13,23 @@ export default function UserPage() {
     const token = Cookies.get('token')
     const user = useParams().username
     
+
+    const getExercises = () => {
+        try{
+        fetch('http://localhost:8080/exercises', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then((res)=>res.json())
+        .then((data)=>setExercises(data))
+        .catch((err)=>console.log(err))
+        }catch(err){
+            console.log('Failed')
+        }
+    }
     useEffect(() => {
         if(!token){
             Navigate('/')
@@ -38,6 +55,7 @@ export default function UserPage() {
                     console.log('test')
                     console.log(data); 
                     setUserData(data)
+                    getExercises();
                 })
             }catch(err){
                 console.error('Failed to fetch')
@@ -63,23 +81,23 @@ export default function UserPage() {
   
     //TODO: Apply token check to the following useEffect:
 
-    useEffect(() => {
-        fetch('http://localhost:8080/exercises')
-        .then((res)=>res.json())
-        .then((data)=>setExercises(data))
-        .catch((err)=>console.log(err))
-    }, [])
+    // useEffect(() => {
+    //     fetch('http://localhost:8080/exercises')
+    //     .then((res)=>res.json())
+    //     .then((data)=>setExercises(data))
+    //     .catch((err)=>console.log(err))
+    // }, [])
     
 
-    const items = exercises.map((e)=>{
-        <Dropdown.Item key={e.id} onClick={()=>{}}>{e.name}</Dropdown.Item>
+    const exercise_dropdown_items = exercises.map((e)=>{
+        return <Dropdown.Item key={e.id} onClick={()=>{}}>{e.exercise}</Dropdown.Item>
     })
 
     return (
-
         <div className="text-red-500g">
             <header className='w-full h-20 bg-yellow-100'>
                 <h1>header</h1>
+                <Button onClick={() => {Cookies.remove('token'); Navigate('/')}}>Sign Out</Button>
             </header>
             <body className='w-full h-4/5 bg-green-200'>
                 <h1>RECORD NEW WORKOUT</h1>
@@ -89,9 +107,10 @@ export default function UserPage() {
                             Select Exercise
                         </span>
                     </Dropdown.Header>
-                    {items.length > 0 && items}
+                    {exercise_dropdown_items.length > 0 && exercise_dropdown_items}
                 </Dropdown>
-                <div alt='select an exercise' className='w-full'>
+                {/* ///////////////////////////// */}
+                <div alt='selected exercise' className='w-full'>
                     {/* to do app flavor  */}
                 </div>
                 <div alt='selected exercises' className='w-full'>

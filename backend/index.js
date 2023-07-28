@@ -2,7 +2,7 @@
 const express = require('express')
 const cors = require('cors')
 const bcrypt = require('bcryptjs')
-const knex = require('knex')(require('./knexfile.js')["development"])
+const knex = require('./db/dbConnection.js')
 const app = express()
 const port = 8080;
 
