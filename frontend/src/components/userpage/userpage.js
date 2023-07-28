@@ -20,13 +20,7 @@ export default function UserPageMain({userData, exercises}){
 
   return (
     <div className="text-red-500g">
-      <header className='w-full h-20 bg-yellow-100'>
-        <h1>header</h1>
-        <div className="flex gap-10">
-          <Button onClick={() => {Cookies.remove('token'); Navigate('/')}}>Sign Out</Button>
-          {userData[0].role_id === 1 && (<Button onClick={() => Navigate('adminTools')}>Admin Page</Button>)}
-        </div>
-      </header>
+
       <div className='w-full h-4/5 bg-green-200'>
         <h1>RECORD NEW WORKOUT</h1>
         <Exercise exercises={exercises} />

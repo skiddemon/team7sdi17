@@ -9,7 +9,9 @@ import AdminPage from '../adminpage/adminpage';
 export default function UserPage() {
 
     const [exercises, setExercises] = useState([]);
-    const [userData, setUserData] = useState([])
+    const [userData, setUserData] = useState([]);
+    const [adminMode, setAdminMode] = useState(false);
+
     const Navigate = useNavigate()
     const token = Cookies.get('token')
     const user = useParams().username
@@ -54,6 +56,7 @@ export default function UserPage() {
                 })
                 .then(data => {
                     setUserData(data)
+                    console.log(data)
                     getExercises();
                 })
             }catch(err){
@@ -93,9 +96,27 @@ export default function UserPage() {
         return <p>Loading....</p>
     }
     return (
-        <Routes>
-            <Route path='/' element={<UserPageMain userData={userData} exercises={exercises}/>} />
-            <Route path='adminTools' element={<AdminPage />}/>
-        </Routes>
+    <>
+     <header className='w-full h-20 bg-yellow-100'>
+       <Card>
+            <div className="flex items-center justify-between">
+                <h1 className="w-fit">Final Project</h1>
+                <div className="flex gap-10">
+                    <Button className="w-40" onClick={() => {Cookies.remove('token'); Navigate('/')}}>Sign Out</Button>
+                    {adminMode ? <Button className= "w-40" onClick={() => {setAdminMode(false); Navigate(`/user/${userData[0].user_name}`)}}>Home</Button> : <Button className="w-40" onClick={() =>{setAdminMode(true); Navigate('adminTools')}}>Admin Tools</Button>}
+                </div>
+            </div>
+        </Card> 
+    </header>
+    <Routes>
+        <Route path='/' element={<UserPageMain userData={userData} exercises={exercises}/>} />
+        <Route path='adminTools' element={<AdminPage adminMode={adminMode} setAdminMode={setAdminMode} />}/>
+    </Routes>
+    </>
     )
 }
+
+
+// {adminMode ? <h1>Render if true</h1> : <h1>Render if false</h1>}
+
+
