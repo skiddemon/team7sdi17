@@ -87,11 +87,6 @@ export default function UserPage() {
     //     .then((data)=>setExercises(data))
     //     .catch((err)=>console.log(err))
     // }, [])
-    
-
-    const exercise_dropdown_items = exercises.map((e)=>{
-        return <Dropdown.Item key={e.id} onClick={()=>{}}>{e.exercise}</Dropdown.Item>
-    })
 
     return (
         <div className="text-red-500g">
@@ -101,14 +96,7 @@ export default function UserPage() {
             </header>
             <body className='w-full h-4/5 bg-green-200'>
                 <h1>RECORD NEW WORKOUT</h1>
-                <Dropdown label="Exercises" alt="exercise-dropdown">
-                    <Dropdown.Header>
-                        <span className="block text-sm">
-                            Select Exercise
-                        </span>
-                    </Dropdown.Header>
-                    {exercise_dropdown_items.length > 0 && exercise_dropdown_items}
-                </Dropdown>
+                <Exercise exercises={exercises}/>
                 {/* ///////////////////////////// */}
                 <div alt='selected exercise' className='w-full'>
                     {/* to do app flavor  */}
