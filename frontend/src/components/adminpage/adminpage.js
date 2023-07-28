@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 import { useNavigate, useParams, Route, Routes } from 'react-router-dom'
 import Exercise from '../exercise/exercise'
 
-export default function AdminPage({ adminMode, setAdminMode }) {
+export default function AdminPage() {
     const [lastName, setLastName] = useState('')
     const [firstName, setFirstName] = useState('')
     const [userName, setUserName] = useState('')
