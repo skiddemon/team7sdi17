@@ -41,6 +41,7 @@ export default function UserPageMain({userData, exercises}){
 
   return (
     <div className="text-red-500g">
+
       <header className='flex flex-end flex-row justify-end align-middle w-full h-20 bg-yellow-100 bg-opacity-0'>
         
         <div className="flex gap-10 m-auto mr-4">
@@ -50,6 +51,7 @@ export default function UserPageMain({userData, exercises}){
       </header>
       <div className='recordNewWorkoutContainer flex flex-column w-full h-4/5 justify-center bg-green-200 bg-opacity-25'>
         <div className='title flex h-120 w-2/4 text-8xl align-middle m-auto rounded-[15px]'>RECORD A NEW WORKOUT</div>
+
         
         <div alt='selected exercise' className='w-full'>
           {renderExerciseComponents()}
