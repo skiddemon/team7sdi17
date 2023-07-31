@@ -23,7 +23,8 @@ const SignIn = ({ setIsSignInModal }) => {
       )
       .then(data => {
         if (data.token) {
-          Cookies.set('token', data.token)
+          let inFifteenMinutes = new Date(new Date().getTime() + 15 * 60 * 1000);
+          Cookies.set('token', data.token, {expires: inFifteenMinutes})
           Navigate(`/user/${data.user_name}`)
         } else {
           setAuthFail(true)

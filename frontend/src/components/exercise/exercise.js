@@ -17,7 +17,7 @@ const Exercise = ({exercises}) => {
     return(
         <>
         
-                <div class="exerciseCard flex flex-row justify-around h-20 w-11/12 align-middle min-w-[400px] align-middle bg-[gray] text-center shadow-[4px_4px_10px_black] m-2 p-[3px] rounded-[10px]">
+                <div className="exerciseCard flex flex-row justify-around h-20 w-11/12 align-middle min-w-[400px] align-middle bg-[gray] text-center shadow-[4px_4px_10px_black] m-2 p-[3px] rounded-[10px]">
                 <Dropdown label={
                     selectedExercise ? selectedExercise?.exercise_name : 'Select an Exercise'
                 } alt="Exercises" className='flex m-auto'>
@@ -99,8 +99,8 @@ const Exercise = ({exercises}) => {
                     alt='Comment input'
                     className='flex m-auto'
                     />
-                <button type="button" class="flex focus:outline-none m-auto text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">EDIT</button>
-                <button type="button" class="flex focus:outline-none m-auto text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                <button type="button" className="flex focus:outline-none m-auto text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">EDIT</button>
+                <button type="button" className="flex focus:outline-none m-auto text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
             </div>
            
         </>
