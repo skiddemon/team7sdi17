@@ -8,7 +8,7 @@ const Exercise = ({exercises, index, exercisesToLog, setExercisesToLog}) => {
     const [reps, setReps] = useState(null);
     const [distance, setDistance] = useState(null);
     const [split, setSplit] = useState(null);
-    const [comment, setComment] = useState(null);
+    const [comments, setComments] = useState(null);
 
     const updateExerciseObject = () => {
         const exerciseObj = {
@@ -18,7 +18,7 @@ const Exercise = ({exercises, index, exercisesToLog, setExercisesToLog}) => {
             distance: distance,
             weight: weight,
             split: split,
-            comment: comment          
+            comments: comments         
         }
         const newExArray = exercisesToLog;
         newExArray[index] = exerciseObj;
@@ -32,7 +32,7 @@ const Exercise = ({exercises, index, exercisesToLog, setExercisesToLog}) => {
 
     useEffect(()=>{
         updateExerciseObject();
-    }, [selectedExercise, weight, numSets, reps, distance, split, comment])
+    }, [selectedExercise, weight, numSets, reps, distance, split, comments])
 
     return(
         <div class="exerciseCard flex flex-row justify-around h-20 w-11/12 align-middle min-w-[400px] align-middle bg-[gray] text-center shadow-[4px_4px_10px_black] m-2 p-[3px] rounded-[10px]" onClick={()=>{}}>
@@ -110,8 +110,8 @@ const Exercise = ({exercises, index, exercisesToLog, setExercisesToLog}) => {
             <Label htmlFor='comment' value='Comment' className='flex m-auto' />
             <TextInput
             id='comment'
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                value={comments}
+                onChange={(e) => setComments(e.target.value)}
                 placeholder='How did it go?'
                 type='text'
                 alt='Comment input'

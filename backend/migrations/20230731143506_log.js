@@ -5,7 +5,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('logs', table => {
         table.increments('id').primary;
-        table.datetime('some_time', {precision: 6}).defaultTo(knex.fn.now(6));//change some_time to date_time
+        table.datetime('time_stamp', {precision: 2}).defaultTo(knex.fn.now(2));//change some_time to date_time
         table.integer('exercise_id');
         table.integer('sets');
         table.integer('reps');
