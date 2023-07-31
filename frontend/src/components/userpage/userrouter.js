@@ -1,8 +1,7 @@
 import { Button, Card, Label, TextInput, Dropdown } from 'flowbite-react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie'
-import { useNavigate, useParams, Route, Routes, Router } from 'react-router-dom'
-import Exercise from '../exercise/exercise'
+import { useNavigate, useParams, Route, Routes} from 'react-router-dom'
 import UserPageMain from './userpage';
 import AdminPage from '../adminpage/adminpage';
 import SMEPage from '../smepage/sme';
@@ -50,7 +49,6 @@ export default function UserPage() {
                 })
                     .then(res => {
                         if (!res.ok) {
-                            console.log('if(!res.ok)')
                             Navigate('/')
                         } else {
                             return res.json()
@@ -58,7 +56,8 @@ export default function UserPage() {
                     })
                     .then(data => {
                         setUserData(data)
-                        console.log(data)
+                        console.log(data);
+                        Cookies.set('userId', data[0].id)
                         getExercises();
                     })
             } catch (err) {
@@ -78,15 +77,6 @@ export default function UserPage() {
                     <div className="flex items-center justify-between">
                         <h1 className="w-fit">Final Project</h1>
                         <div className="flex gap-10">
-
-
-                            {/* {userData[0].role_id !== 3
-                            ?
-                            <Button className="w-40" onClick={() => Navigate('governator')}>Governate</Button>
-                            :
-                            <Button className="w-40" onClick={() => { setAdminMode(false); Navigate(`/user/${userData[0].user_name}`) }}>Home</Button>
-                            } */}
-
                             {userData[0].role_id === 1
                                 ?
                                 (adminMode
@@ -120,27 +110,3 @@ export default function UserPage() {
         </>
     )
 }
-
-
-    //Drop Down w/ Exercises
-    //Conditionally Render Fields on Type of Exercise: strength (weight/reps) or cardio (distance/reps)
-    //"+" button to add this to the set of exercises (i.e. workout) I accomplished
-    //"X" button to remove exercise from set of exercises I accomplished
-    //"Log" button to log workout to DB
-
-    // need to make a dt exercise_categories, one category can have many exercises, ((migrate:make))
-    // need to alter dt exercises to include exercise_categories forign key, ((modify the 20230726210551_exercises migration file))
-    // make seed exercise_categories with the three categories we talked about, plyometric, cardio, strength, ((npx knex seed:06-exercise_categories))
-    // modify dt exercises seed to include the field for exercise_categories foriegn key, and modify dropforign key before drop table (())
-    // rollback, then migrate latest, seed run
-
-
-
-    //TODO: Apply token check to the following useEffect:
-
-    // useEffect(() => {
-    //     fetch('http://localhost:8080/exercises')
-    //     .then((res)=>res.json())
-    //     .then((data)=>setExercises(data))
-    //     .catch((err)=>console.log(err))
-    // }, [])

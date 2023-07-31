@@ -43,8 +43,6 @@ export default function UserPageMain({ userData, exercises }) {
     <div className="text-red-500g">
       <div className='recordNewWorkoutContainer flex flex-column w-full h-4/5 justify-center bg-green-200 bg-opacity-25'>
         <div className='title flex h-120 w-2/4 text-8xl align-middle m-auto rounded-[15px]'>RECORD A NEW WORKOUT</div>
-
-        
         <div alt='selected exercise' className='w-full'>
           {renderExerciseComponents()}
           <div className="addExerciseButtonContainer flex h-auto w-full p-4">
@@ -52,7 +50,6 @@ export default function UserPageMain({ userData, exercises }) {
             </Button>
           </div>
         </div>
-        
       </div>
       <footer className='flex flex-row w-full h-20 bg-indigo-200 bg-opacity-25'>
         
@@ -60,4 +57,4 @@ export default function UserPageMain({ userData, exercises }) {
       </footer>
     </div>
   )
-} 
+}

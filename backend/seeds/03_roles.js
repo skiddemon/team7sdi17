@@ -11,3 +11,12 @@ exports.seed = async function(knex) {
     {role: 'trainer'}
   ]);
 };
+
+
+/*if(user.role_id === 1){
+  return "Admin"
+}else if(user.role_id === 2){
+  return "User"
+}else{
+  return "Trainer"
+}

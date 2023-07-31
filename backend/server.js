@@ -95,16 +95,28 @@ app.get('/branches', async (req, res) => {
 })
 //////////////////////// USERS ROUTE ///////////////////////////////
 app.get('/users', async (req, res) => {
+  const { first_name, last_name, email, user_name } = req.query;
+
+  console.log(last_name, first_name, email, user_name)
   try {
-    const users = await knex.select("*").from('users')
-    users.map((e) => {
-      delete e.password
-    })
-    res.status(201).json(users)
+    let query = knex('users').select("*");
+
+    if (user_name) {
+      query = query.where('user_name', 'ilike', `%${user_name}%`);
+    } else if (email) {
+      query = query.where('email', 'ilike',email);
+    } else if (last_name) {
+      query = query.where('last_name', 'ilike', `%${last_name}%`);
+      if(first_name){
+        query = query.where('first_name', 'ilike', `%${first_name}%`);
+      }
+    }
+    const users = await query;
+    res.status(200).json(users);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve users data.' })
+    res.status(500).json({message: "Failed to retrieve user."});
   }
-})
+});
 
 app.post('/users', async (req, res) => {
   const { first_name, last_name, email, user_name, password, branch_id, base_id } = req.body;
@@ -137,6 +149,48 @@ app.post('/users', async (req, res) => {
     res.status(500).json(err.message)
   }
 
+})
+
+app.patch('/users/:id', async (req, res) => {
+  const {id} = req.params;
+  const {first_name, last_name, email, role_id, user_name} = req.body;
+
+  try{
+    let userToUpdate = {};
+
+    if(last_name) userToUpdate.last_name = last_name;
+    if(first_name) userToUpdate.first_name = first_name;
+    if(email) userToUpdate.email = email;
+    if(role_id) userToUpdate.role_id = role_id;
+    if(user_name) userToUpdate.user_name = user_name;
+
+    const updatedUser = await knex('users')
+      .where({ id })
+      .update(userToUpdate)
+      .returning("*");
+
+    if(!updatedUser.length){
+      return res.status(404).json({message: "User Not Found!"})
+    }
+
+    res.status(200).json(updatedUser);
+  }catch(err){
+    res.status(500).json({message: "Failed to update user"});
+  }
+});
+
+app.delete('/users/delete/:id', async (req, res) => {
+  const {id} = req.params
+
+  try{
+    await knex('users')
+    .delete()
+    .where('id', id)
+
+    res.status(200).json({message: "User Deleted"})
+  }catch(err){
+    res.status(500).json({message: "Failed to delete User."})
+  }
 })
 
 ///////////////////// SPECIFIC USER ROUTE ////////////////////////
@@ -299,7 +353,7 @@ app.post('/logs', async (req, res) => {
 //     res.status(500).json(err.message)
   // }
 
-// })
+
 
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
 app.listen(port, () => {
