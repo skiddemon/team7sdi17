@@ -43,6 +43,8 @@ app.get('/', (req, res) => {
   <br></br>
   <a href='http://localhost:8080/exercises'>Exercises Page</a>
   <br></br>
+  <a href='http://localhost:8080/logs'>Logs</a>
+  <br></br>
   `)
 })
 //////////////////////// LOGIN ROUTE ///////////////////////////////
@@ -193,7 +195,7 @@ app.post('/exercises', async (req, res) => {
   const {name} = req.body;
   console.log(req.body)
   const newExercise = {
-   name: name
+    name: name
   }
 
   try {
@@ -209,7 +211,95 @@ app.post('/exercises', async (req, res) => {
   }
 
 })
+//////////////////////// LOGS ROUTE ////////////////////////////////////////////////
+app.get('/logs', async (req, res) => {
+  const specificUserId = req.body.user_id
+  console.log(req.body.user_id)
 
+  console.log(`User '${specificUserId}' has logs`)
+  if(req.body.user_id === specificUserId){
+  try {
+    const userLogs = await knex.select('*').from('logs')
+    res.status(201).json(userLogs)
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve users logs.' })
+  }
+  }else{
+    res.status(500).json({message: 'Failed'})
+  }
+});
+
+app.get('/logs/:id', async (req, res) => {
+  const specificUserId = req.params.id
+  console.log(req.params.id)
+
+  console.log(`User '${specificUserId}' has logs`)
+  if(req.params.id === specificUserId){
+  try {
+    const userLogs = await knex.select('*').from('logs').where({ user_id: specificUserId })
+    res.status(201).json(userLogs)
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve users logs.' })
+  }
+  }else{
+    res.status(500).json({message: 'Failed'})
+  }
+});
+
+app.post('/logs', async (req, res) => {
+  const { exercise_id, sets, reps, distance, weight, split, comments, user_id} = req.body;
+  console.log(req.body)
+  const newLog = { 
+    exercise_id: exercise_id, 
+    sets: sets, 
+    reps: reps, 
+    distance: distance, 
+    weight: weight, 
+    split: split, 
+    comments: comments, 
+    user_id: user_id 
+  }
+
+  try {
+    console.log('do we even get this far?')
+    const addedLogResponse = await knex('logs')
+      .insert(newLog)
+      .returning('*')
+
+    console.log('log response: ', addedLogResponse)
+    res.status(201).json(addedLogResponse)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }})
+
+
+// app.post('//logs/:id', async (req, res) => {
+//   const { exercise_id, sets, reps, distance, weight, split, comments, user_id} = req.body;
+//   console.log(req.body)
+//   const newLog = { 
+//     exercise_id: exercise_log.exercise_id, 
+//     sets: exercise_log.sets, 
+//     reps: exercise_log.reps, 
+//     distance: exercise_log.distance, 
+//     weight: exercise_log.weight, 
+//     split: exercise_log.split, 
+//     comments: exercise_log.comments, 
+//     user_id: exercise_log.user_id 
+//   }
+
+//   try {
+//     console.log('do we even get this far?')
+//     const addedLogResponse = await knex('logs')
+//       .insert(newLog)
+//       .returning('*')
+
+//     console.log('log response: ', addedLogResponse)
+//     res.status(201).json(addedLogResponse)
+//   } catch (err) {
+//     res.status(500).json(err.message)
+  // }
+
+// })
 
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
 app.listen(port, () => {
