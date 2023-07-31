@@ -1,8 +1,7 @@
 import { Button, Card, Label, TextInput, Dropdown } from 'flowbite-react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie'
-import { useNavigate, useParams, Route, Routes, Router } from 'react-router-dom'
-import Exercise from '../exercise/exercise'
+import { useNavigate, useParams, Route, Routes} from 'react-router-dom'
 import UserPageMain from './userpage';
 import AdminPage from '../adminpage/adminpage';
 
@@ -48,7 +47,6 @@ export default function UserPage() {
                 })
                     .then(res => {
                         if (!res.ok) {
-                            console.log('if(!res.ok)')
                             Navigate('/')
                         } else {
                             return res.json()
@@ -56,7 +54,8 @@ export default function UserPage() {
                     })
                     .then(data => {
                         setUserData(data)
-                        console.log(data)
+                        console.log(data);
+                        Cookies.set('userId', data[0].id)
                         getExercises();
                     })
             } catch (err) {
@@ -77,7 +76,7 @@ export default function UserPage() {
                         <h1 className="w-fit">Final Project</h1>
                         <div className="flex gap-10">
                             <Button className="w-40" onClick={() => { Cookies.remove('token'); Navigate('/') }}>Sign Out</Button>
-                            {userData[0].role_id == 1
+                            {userData[0].role_id === 1
                                 ?
                                 (adminMode
                                     ?
