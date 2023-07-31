@@ -21,7 +21,7 @@ export default function UserPageMain({ userData, exercises }) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({user_id:user_id, ...e})
+        body: JSON.stringify({user_id:userData[0].id, ...e})
       })
       .then((res) => res.json())
       .then((data) => console.log(data))
