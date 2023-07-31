@@ -18,8 +18,8 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <h1 className="w-fit">Final Project</h1>
           <div className="flex gap-10">
-            <Button className="fit-content" onClick={() => setIsSignInModal(true)}>Sign-In</Button>
             <Button className="fit-content" onClick={() => setIsOpenModal(true)}>Create Account</Button>
+            <Button className="fit-content" onClick={() => setIsSignInModal(true)}>Sign-In</Button>
           </div>
         </div>
       </Card>

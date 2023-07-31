@@ -4,9 +4,9 @@ import Cookies from 'js-cookie'
 import { useNavigate, useParams, Route, Routes } from 'react-router-dom'
 import Exercise from '../exercise/exercise'
 
-export default function UserPageMain({userData, exercises}){
+export default function UserPageMain({ userData, exercises }) {
   const [exercisesToLog, setExercisesToLog] = useState([{}]);
-  
+
   const handleAddExercise = () => {
     setExercisesToLog((prevState) => [...prevState, {}]);
   }
@@ -30,7 +30,7 @@ export default function UserPageMain({userData, exercises}){
 
   const Navigate = useNavigate();
 
-  if(userData.length < 1 || exercises.length < 1){
+  if (userData.length < 1 || exercises.length < 1) {
     return <p>Loading....</p>
   }
 
@@ -41,14 +41,6 @@ export default function UserPageMain({userData, exercises}){
 
   return (
     <div className="text-red-500g">
-
-      <header className='flex flex-end flex-row justify-end align-middle w-full h-20 bg-yellow-100 bg-opacity-0'>
-        
-        <div className="flex gap-10 m-auto mr-4">
-          <Button onClick={() => {Cookies.remove('token'); Navigate('/')}}>Sign Out</Button>
-          {userData[0].role_id === 1 && (<Button onClick={() => Navigate('adminTools')}>Admin Page</Button>)}
-        </div>
-      </header>
       <div className='recordNewWorkoutContainer flex flex-column w-full h-4/5 justify-center bg-green-200 bg-opacity-25'>
         <div className='title flex h-120 w-2/4 text-8xl align-middle m-auto rounded-[15px]'>RECORD A NEW WORKOUT</div>
 

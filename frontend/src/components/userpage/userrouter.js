@@ -5,12 +5,14 @@ import { useNavigate, useParams, Route, Routes, Router } from 'react-router-dom'
 import Exercise from '../exercise/exercise'
 import UserPageMain from './userpage';
 import AdminPage from '../adminpage/adminpage';
+import SMEPage from '../smepage/sme';
 
 export default function UserPage() {
 
     const [exercises, setExercises] = useState([]);
     const [userData, setUserData] = useState([]);
     const [adminMode, setAdminMode] = useState(false);
+    const [smeMode, setSmeMode] = useState(false)
 
     const Navigate = useNavigate()
     const token = Cookies.get('token')
@@ -76,8 +78,16 @@ export default function UserPage() {
                     <div className="flex items-center justify-between">
                         <h1 className="w-fit">Final Project</h1>
                         <div className="flex gap-10">
-                            <Button className="w-40" onClick={() => { Cookies.remove('token'); Navigate('/') }}>Sign Out</Button>
-                            {userData[0].role_id == 1
+
+
+                            {/* {userData[0].role_id !== 3
+                            ?
+                            <Button className="w-40" onClick={() => Navigate('governator')}>Governate</Button>
+                            :
+                            <Button className="w-40" onClick={() => { setAdminMode(false); Navigate(`/user/${userData[0].user_name}`) }}>Home</Button>
+                            } */}
+
+                            {userData[0].role_id === 1
                                 ?
                                 (adminMode
                                     ?
@@ -85,8 +95,19 @@ export default function UserPage() {
                                     :
                                     <Button className="w-40" onClick={() => { setAdminMode(true); Navigate('adminTools') }}>Admin Tools</Button>)
                                 :
-                                <Button className="w-40" onClick={() => { Navigate(`/user/${userData[0].user_name}`) }}>Home</Button>
+                                userData[0].role_id === 3
+                                    ?
+                                    (smeMode
+                                        ?
+                                        <Button className="w-40" onClick={() => { setSmeMode(false); Navigate(`/user/${userData[0].user_name}`) }}>Home</Button>
+                                        :
+                                        <Button className="w-40" onClick={() => { setSmeMode(true); Navigate('governator') }}>Governate</Button>)
+                                    :
+                                    ''
+                                    // <Button className="w-40" onClick={() => { Navigate(`/user/${userData[0].user_name}`) }}>Home</Button>
                             }
+                            <Button className="w-40" onClick={() => { Cookies.remove('token'); Navigate('/') }}>Sign Out</Button>
+
                         </div>
                     </div>
                 </Card>
@@ -94,6 +115,7 @@ export default function UserPage() {
             <Routes>
                 <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} />} />
                 <Route path='adminTools' element={<AdminPage />} />
+                <Route path='governator' element={<SMEPage />} />
             </Routes>
         </>
     )
