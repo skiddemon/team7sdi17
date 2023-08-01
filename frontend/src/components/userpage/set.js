@@ -65,7 +65,7 @@ export default function Set({set, setIndex, workout, handleSetChange}){
   {disabled ? (
     <AiFillEdit className="cursor-pointer" onClick={() => setDisabled(false)}/>
   ) : (
-    <AiOutlineCheckCircle className="cursor-pointer" onClick={() => {setDisabled(true)}}/>
+    <AiOutlineCheckCircle className="cursor-pointer" onClick={() => {setDisabled(true); updateSet()}}/>
   )}
   <AiFillDelete className="cursor-pointer"/>
 </div>
