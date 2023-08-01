@@ -352,8 +352,56 @@ app.post('/logs', async (req, res) => {
 //   } catch (err) {
 //     res.status(500).json(err.message)
   // }
+//////////////////////// set_reps ROUTE/////////////////////////
+app.get('/set_reps', async (req, res) => {
+  const specificUserId = req.body.user_id
+  console.log(req.body.user_id)
 
+  console.log(`set_reps'${specificUserId}' has logs`)
+  if(req.body.user_id === specificUserId){
+  try {
+    const userLogs = await knex.select('*').from('set_reps')
+    res.status(201).json(userLogs)
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve set_reps.' })
+  }
+  }else{
+    res.status(500).json({message: 'Failed'})
+  }
+});
 
+app.post('/set_reps', async (req, res) => {
+  const { name, sets, reps} = req.body;
+  console.log(req.body)
+  const newSetRep = { 
+    name: name,
+    sets: sets,
+    reps: reps,
+  }
+
+  try {
+    console.log('do we even get this far?')
+    const addedLogResponse = await knex('set_reps')
+      .insert(newSetRep)
+      .returning('*')
+
+    console.log('log response: ', addedLogResponse)
+    res.status(201).json(addedLogResponse)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }})
+
+  //////////////////////// workout_plan ROUTE/////////////////////////
+
+  app.get('/workouts', async (req, res) => {
+
+  })
+
+  //////////////////////// exercise_plan ROUTE////////////////////////
+
+  app.get('/exercise_plane', async (req, res) => {
+    
+  })
 
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
 app.listen(port, () => {
