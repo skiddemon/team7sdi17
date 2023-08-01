@@ -5,6 +5,8 @@ import { useNavigate, useParams, Route, Routes} from 'react-router-dom'
 import UserPageMain from './userpage';
 import AdminPage from '../adminpage/adminpage';
 import SMEPage from '../smepage/sme';
+import NewWorkout from './newworkout.js'
+
 
 export default function UserPage() {
 
@@ -106,6 +108,7 @@ export default function UserPage() {
                 <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} />} />
                 <Route path='adminTools' element={<AdminPage />} />
                 <Route path='governator' element={<SMEPage />} />
+                <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData}/>} />
             </Routes>
         </>
     )
