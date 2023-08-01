@@ -6,6 +6,7 @@ import UserPageMain from './userpage';
 import AdminPage from '../adminpage/adminpage';
 import SMEPage from '../smepage/sme';
 import NewWorkout from './newworkout.js'
+import FindPlan from '../plans/findplan.js'
 
 
 export default function UserPage() {
@@ -60,6 +61,7 @@ export default function UserPage() {
                         setUserData(data)
                         console.log(data);
                         Cookies.set('userId', data[0].id)
+                        Cookies.set('user_name', data[0].user_name)
                         getExercises();
                     })
             } catch (err) {
@@ -77,7 +79,7 @@ export default function UserPage() {
             <header className='w-full h-20 bg-yellow-100'>
                 <Card>
                     <div className="flex items-center justify-between">
-                        <h1 className="w-fit">Final Project</h1>
+                        <h1 className="w-fit cursor-pointer" onClick={()=>Navigate(`/user/${userData[0].user_name}`)}>Final Project</h1>
                         <div className="flex gap-10">
                             {userData[0].role_id === 1
                                 ?
@@ -94,8 +96,8 @@ export default function UserPage() {
                                         <Button className="w-40" onClick={() => { setSmeMode(false); Navigate(`/user/${userData[0].user_name}`) }}>Home</Button>
                                         :
                                         <Button className="w-40" onClick={() => { setSmeMode(true); Navigate('governator') }}>Governate</Button>)
-                                    :
-                                    ''
+                                    : null
+
                                     // <Button className="w-40" onClick={() => { Navigate(`/user/${userData[0].user_name}`) }}>Home</Button>
                             }
                             <Button className="w-40" onClick={() => { Cookies.remove('token'); Navigate('/') }}>Sign Out</Button>
@@ -109,6 +111,7 @@ export default function UserPage() {
                 <Route path='adminTools' element={<AdminPage />} />
                 <Route path='governator' element={<SMEPage />} />
                 <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData}/>} />
+                <Route path='findPlan/*' element={<FindPlan />} />
             </Routes>
         </>
     )
