@@ -300,45 +300,123 @@ app.get('/logs/:id', async (req, res) => {
   }
 });
 
-app.post('/logs', async (req, res) => {
-  const { exercise_id, sets, reps, distance, weight, split, comments, user_id} = req.body;
-  console.log(req.body)
-  const newLog = { 
-    exercise_id: exercise_id, 
-    sets: sets, 
-    reps: reps, 
-    distance: distance, 
-    weight: weight, 
-    split: split, 
-    comments: comments, 
-    user_id: user_id 
-  }
+app.get('/workout/history/:id', async (req, res) => {
+  const { id } = req.params;
 
   try {
-    console.log('do we even get this far?')
-    const addedLogResponse = await knex('logs')
-      .insert(newLog)
-      .returning('*')
+    const workoutHistory = await knex('workouts')
+    .where('user_id', id)
+    .join('activity', 'workouts.id', 'activity.workout_id')
+    .join('exercises', 'activity.exercise_id', 'exercises.id')
+    .join('sets', 'activity.id', 'sets.activity_id')
+    .select(
+      'workouts.id as workout_id',
+      'workouts.name as workout_name',
+      'workouts.workout_date',
+      'activity.id as activity_id',
+      'exercises.id as exercise_id',
+      'exercises.exercise_category_id as category_id',
+      'exercises.name as exercise_name',
+      'sets.reps',
+      'sets.weight',
+      'sets.distance'
+    );
 
-    console.log('log response: ', addedLogResponse)
-    res.status(201).json(addedLogResponse)
+    const result = workoutHistory.reduce((accumulator, current) => {
+      let workout = accumulator.find(e => e.ID === current.workout_id);
+      if (!workout) {
+        workout = {
+          ID: current.workout_id,
+          name: current.workout_name,
+          workout_date: current.workout_date,
+          activity: []
+        };
+        accumulator.push(workout);
+      }
+
+      let activity = workout.activity.find(e => e.exercise_ID === current.exercise_id);
+      if (!activity) {
+        activity = {
+          exercise_ID: current.exercise_id,
+          exercise_name: current.exercise_name,
+          category_id: current.category_id,
+          sets: []
+        };
+        workout.activity.push(activity);
+      }
+
+      activity.sets.push({
+        reps: current.reps,
+        weight: current.weight,
+        distance: current.distance
+      });
+
+      return accumulator;
+    }, []);
+
+    res.status(200).json(result);
   } catch (err) {
-    res.status(500).json(err.message)
-  }})
+    console.error(err);
+    res.status(500).json({ message: 'There was an error retrieving the workout history' });
+  }
+});
+
+app.post('/workout', async (req, res) => {
+  const {workouts, user_name, user_id} = req.body
+  const today = new Date();
+  const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  const workoutToAdd = {
+    name: `${user_name} ${dateString}`,
+    user_id: user_id,
+    workout_date: dateString
+  }
+
+  const addedWorkout = await knex('workouts')
+    .insert(workoutToAdd)
+    .returning("*")
+
+  await Promise.all(workouts.map(async (e) => {
+    const activityToAdd = {
+      exercise_id: e.exercise_id,
+      workout_id: addedWorkout[0].id
+    }
+
+    const addedActivity = await knex('activity')
+      .insert(activityToAdd)
+      .returning("*")
+
+    await Promise.all(e.sets.map(async (i) => {
+      const setToAdd = {
+        reps: i.reps,
+        weight: i.weight,
+        distance: i.distance,
+        activity_id: addedActivity[0].id
+      }
+      await knex('sets')
+        .insert(setToAdd)
+    }))
+  }))
+  res.status(200).json({message: "success"})
+
+})
+
+
+
 
 
 // app.post('//logs/:id', async (req, res) => {
 //   const { exercise_id, sets, reps, distance, weight, split, comments, user_id} = req.body;
 //   console.log(req.body)
-//   const newLog = { 
-//     exercise_id: exercise_log.exercise_id, 
-//     sets: exercise_log.sets, 
-//     reps: exercise_log.reps, 
-//     distance: exercise_log.distance, 
-//     weight: exercise_log.weight, 
-//     split: exercise_log.split, 
-//     comments: exercise_log.comments, 
-//     user_id: exercise_log.user_id 
+//   const newLog = {
+//     exercise_id: exercise_log.exercise_id,
+//     sets: exercise_log.sets,
+//     reps: exercise_log.reps,
+//     distance: exercise_log.distance,
+//     weight: exercise_log.weight,
+//     split: exercise_log.split,
+//     comments: exercise_log.comments,
+//     user_id: exercise_log.user_id
 //   }
 
 //   try {

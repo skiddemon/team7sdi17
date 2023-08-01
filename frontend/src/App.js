@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 
 function App() {
   return (
-    <div className="App h-screen w-screen" style={{ backgroundImage: "url('https://wallpaperaccess.com/full/1087589.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}>
+    <div className="App min-h-screen min-w-screen pb-20" style={{ backgroundImage: "url('https://wallpaperaccess.com/full/1087589.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}>
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/user/:username/*" element={<UserPage />}/>
