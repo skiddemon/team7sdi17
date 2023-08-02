@@ -2,7 +2,7 @@ import { Button, Card, Label, TextInput, Dropdown } from 'flowbite-react';
 import { useState, useEffect, Children } from 'react';
 import Cookies from 'js-cookie'
 import { useNavigate, useParams, Route, Routes } from 'react-router-dom'
-import Exercise from '../exercise/exercise'
+import DataView from './dataview.js'
 
 export default function UserPageMain({ userData, exercises }) {
   const Navigate = useNavigate()
@@ -18,7 +18,9 @@ export default function UserPageMain({ userData, exercises }) {
         <Button className="w-40">Wokout History</Button>
         <Button className="w-40" onClick={() => Navigate('findPlan')}>Find Plan</Button>
       </div>
-
+      <div className="mt-10">
+        <DataView />
+      </div>
     </div>
   )
 }
