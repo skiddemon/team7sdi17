@@ -300,6 +300,8 @@ app.get('/logs/:id', async (req, res) => {
   }
 });
 
+
+
 app.get('/workout/history/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -323,7 +325,7 @@ app.get('/workout/history/:id', async (req, res) => {
     );
 
     const result = workoutHistory.reduce((accumulator, current) => {
-      let workout = accumulator.find(e => e.ID === current.workout_id);
+      let workout = accumulator.find(e => e.id === current.workout_id);
       if (!workout) {
         workout = {
           ID: current.workout_id,
@@ -334,7 +336,7 @@ app.get('/workout/history/:id', async (req, res) => {
         accumulator.push(workout);
       }
 
-      let activity = workout.activity.find(e => e.exercise_ID === current.exercise_id);
+      let activity = workout.activity.find(e => e.exercise_id === current.exercise_id);
       if (!activity) {
         activity = {
           exercise_ID: current.exercise_id,
@@ -360,6 +362,81 @@ app.get('/workout/history/:id', async (req, res) => {
     res.status(500).json({ message: 'There was an error retrieving the workout history' });
   }
 });
+
+app.get('/plans', async (req, res) => {
+  try {
+    const recipies = await knex('recipies')
+      .join('workouts_plan', 'recipies.id', 'workouts_plan.recipies_id')
+      .join('activity_plan', 'workouts_plan.id', 'activity_plan.workout_plan_id')
+      .join('exercises', 'activity_plan.exercise_id', 'exercises.id')
+      .join('sets_plan', 'activity_plan.id', 'sets_plan.activity_plan_id')
+      .select(
+        'recipies.name as plan_name',
+        'recipies.id as recipie_id',
+        'recipies.description as description',
+        'recipies.image as image',
+        'workouts_plan.id as workout_id',
+        'workouts_plan.name as workout_name',
+        'activity_plan.id as activity_id',
+        'exercises.id as exercise_id',
+        'exercises.exercise_category_id as category_id',
+        'exercises.name as exercise_name',
+        'sets_plan.reps',
+        'sets_plan.weight',
+        'sets_plan.distance'
+      );
+
+    const result = recipies.reduce((accumulator, current) => {
+      let recipie = accumulator.find((e) => e.id === current.recipie_id);
+      if (!recipie) {
+        recipie = {
+          id: current.recipie_id,
+          name: current.plan_name,
+          description: current.description,
+          image: current.image,
+          workouts: []
+        };
+        accumulator.push(recipie);
+      }
+
+      let workout = recipie.workouts.find(e => e.id === current.workout_id);
+      if (!workout) {
+        workout = {
+          id: current.workout_id,
+          name: current.workout_name,
+          activity: []
+        };
+        recipie.workouts.push(workout);
+      }
+
+      let activity = workout.activity.find(e => e.exercise_id === current.exercise_id);
+      if (!activity) {
+        activity = {
+          exercise_id: current.exercise_id,
+          exercise_name: current.exercise_name,
+          category_id: current.category_id,
+          sets: []
+        };
+        workout.activity.push(activity);
+      }
+
+      activity.sets.push({
+        reps: current.reps,
+        weight: current.weight,
+        distance: current.distance
+      });
+
+      return accumulator;
+    }, [])
+
+    res.status(200).json(result);
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({ message:"Failed to retrieve plans." });
+  }
+});
+
+
 
 app.post('/workout', async (req, res) => {
   const {workouts, user_name, user_id} = req.body
