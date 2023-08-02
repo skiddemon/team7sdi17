@@ -3,6 +3,7 @@ import { useState, useEffect, Children } from 'react';
 import Cookies from 'js-cookie'
 import { useNavigate, useParams, Route, Routes } from 'react-router-dom'
 import DataView from './dataview.js'
+import history from '../history/history.js'
 
 export default function UserPageMain({ userData, exercises }) {
   const Navigate = useNavigate()
@@ -15,7 +16,7 @@ export default function UserPageMain({ userData, exercises }) {
     <div>
       <div className="flex mt-10 gap-10 justify-center">
         <Button className="w-40" onClick={() => Navigate('newWorkout')}>New Workout</Button>
-        <Button className="w-40">Wokout History</Button>
+        <Button className="w-40" onClick={() => Navigate('history')}>Wokout History</Button>
         <Button className="w-40" onClick={() => Navigate('findPlan')}>Find Plan</Button>
       </div>
       <div className="mt-10">
