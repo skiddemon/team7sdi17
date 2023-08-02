@@ -6,6 +6,7 @@ import { AiOutlineCheckCircle, AiFillDelete } from "react-icons/ai";
 
 export default function NewWorkout({ userData, exercises }){
   const [workouts, setWorkouts] = useState([])
+  const [deletedItem, setDeletedItem] = useState([]);
   const Navigate = useNavigate()
 
   const submitWorkout = () => {
@@ -64,6 +65,11 @@ export default function NewWorkout({ userData, exercises }){
     });
 }
 
+const handleDeleteExercise = (index) => {
+  workouts.splice(index,1)
+  setDeletedItem(index);
+}
+
   const List = () => {
     return exercises.map((e) => <Dropdown.Item key={e.exercise_id} onClick={() => addToWorkouts(e)}>{e.exercise_name}</Dropdown.Item>)
   }
@@ -74,7 +80,7 @@ export default function NewWorkout({ userData, exercises }){
         <Card key={index} className="w-3/4">
           <div className="flex justify-between">
             <p>{e.exercise_name}</p>
-            <Button color="failure" className="w-fit">Delete</Button>
+            <Button onClick={() => handleDeleteExercise (index)} color="failure" className="w-fit" alt="Delete this Exercise and Sets">Delete</Button>
           </div>
           <Accordion>
             <Accordion.Panel>

@@ -8,10 +8,16 @@ export default function Set({set, setIndex, workout, handleSetChange}){
   const [weight, setWeight] = useState(set.weight)
   const [distance, setDistance] = useState(set.distance)
   const [disabled, setDisabled] = useState(false)
+  const [deletedItem, setDeletedItem] = useState([]);
 
   const updateSet = (e) => {
     const newSetValues = {reps: reps, weight: weight, distance: distance}
     handleSetChange(newSetValues)
+  }
+  const deleteSet = (setIndex) =>  {
+    workout.sets.splice(setIndex,1)
+    setDeletedItem(setIndex)
+    //console.log ('workout set '  + workout.sets[setIndex].reps)
   }
 
   return (
@@ -67,7 +73,7 @@ export default function Set({set, setIndex, workout, handleSetChange}){
   ) : (
     <AiOutlineCheckCircle className="cursor-pointer" onClick={() => {setDisabled(true); updateSet()}}/>
   )}
-  <AiFillDelete className="cursor-pointer"/>
+  <AiFillDelete onClick={() => {deleteSet(setIndex)}} alt="Delete Individual Set" className="cursor-pointer"/>
 </div>
 
       </form>
