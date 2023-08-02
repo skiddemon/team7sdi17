@@ -1,6 +1,8 @@
 # Fitness App
 
-![](https://icons.iconarchive.com/icons/icons8/windows-8/256/Sports-Exercise-icon.png)
+![Logo](logo.svg "logo")
+
+
 
 ### Features
 
