@@ -5,6 +5,28 @@ import Cookies from 'js-cookie'
 export default function PlanPage({selectedPlan}){
   const username = Cookies.get("user_name")
   const Navigate = useNavigate();
+  const userId = Cookies.get("userId")
+
+  const submitWorkout = () => {
+    selectedPlan.workouts.forEach((e) => {
+      console.log(selectedPlan)
+      const workoutData = {
+        user_id: userId,
+        user_name: username,
+        name: e.name,
+        completed: false,
+        recipe_id: selectedPlan.id,
+        workouts: e.activity,
+      }
+      fetch('http://localhost:8080/workout', {
+      method: "POST",
+      headers: {"Content-type": "application/json"},
+      body: JSON.stringify(workoutData)
+      })
+      .then(res => res.json())
+      .then(() => Navigate(`/user/${username}`))
+    })
+  }
 
   const RenderSets = ({category, sets}) => {
     return sets.map((e, index)=>{
@@ -54,7 +76,7 @@ export default function PlanPage({selectedPlan}){
         </div>
         <div className="flex justify-evenly">
           <Button color="gray" onClick={()=>Navigate(`/user/${username}/findPlan`)}>Back</Button>
-          <Button >Select This Workout</Button>
+          <Button onClick={submitWorkout}>Select This Workout</Button>
         </div>
       </Card>
     </div>

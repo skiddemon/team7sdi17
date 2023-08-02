@@ -445,13 +445,16 @@ app.get('/plans', async (req, res) => {
 
 
 app.post('/workout', async (req, res) => {
-  const { workouts, user_name, user_id } = req.body
+  const { workouts, user_name, user_id, name, completed, recipe_id} = req.body
+
   const today = new Date();
   const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   const workoutToAdd = {
-    name: `${user_name} ${dateString}`,
+    name: name,
     user_id: user_id,
+    completed: completed,
+    recipe_id: recipe_id,
     workout_date: dateString
   }
 

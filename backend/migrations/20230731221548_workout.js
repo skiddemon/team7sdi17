@@ -7,6 +7,7 @@ exports.up = function(knex) {
     table.increments();
     table.string('name');
     table.integer('user_id')
+    table.boolean('completed')
     table.date('workout_date')
     table.foreign('user_id').references("users.id")
   })

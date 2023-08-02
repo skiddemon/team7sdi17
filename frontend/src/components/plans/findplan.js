@@ -40,7 +40,7 @@ export default function FindPlan(){
 
   const FindPlanHome = () => {
     return (
-      <div className="flex gap-5 m-10">
+      <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-5 m-10">
         {plan.length > 0 && <RenderPlans />}
       </div>
     )
