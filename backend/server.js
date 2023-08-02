@@ -45,6 +45,12 @@ app.get('/', (req, res) => {
   <br></br>
   <a href='http://localhost:8080/logs'>Logs</a>
   <br></br>
+  <a href='http://localhost:8080/plans'>Workout Plans</a>
+  <br></br>
+  <a href='http://localhost:8080/metrics'>Metrics</a>
+  <br></br>
+  <a href='http://localhost:8080/ptTests'>PT Tests</a>
+  <br></br>
   `)
 })
 //////////////////////// LOGIN ROUTE ///////////////////////////////
@@ -65,7 +71,7 @@ app.post('/login', async (req, res) => {
       if (isPasswordValid) {
         console.log(`User '${username}' has successfully logged in`)
 
-        const token = jwt.sign({ user: user.user_name }, JWT_SECRET, {expiresIn: '1h'})
+        const token = jwt.sign({ user: user.user_name }, JWT_SECRET, { expiresIn: '1h' })
         const user_name = user.user_name
         res.status(201).json({ token, user_name })
       } else {
@@ -104,17 +110,17 @@ app.get('/users', async (req, res) => {
     if (user_name) {
       query = query.where('user_name', 'ilike', `%${user_name}%`);
     } else if (email) {
-      query = query.where('email', 'ilike',email);
+      query = query.where('email', 'ilike', email);
     } else if (last_name) {
       query = query.where('last_name', 'ilike', `%${last_name}%`);
-      if(first_name){
+      if (first_name) {
         query = query.where('first_name', 'ilike', `%${first_name}%`);
       }
     }
     const users = await query;
     res.status(200).json(users);
   } catch (err) {
-    res.status(500).json({message: "Failed to retrieve user."});
+    res.status(500).json({ message: "Failed to retrieve user." });
   }
 });
 
@@ -152,44 +158,44 @@ app.post('/users', async (req, res) => {
 })
 
 app.patch('/users/:id', async (req, res) => {
-  const {id} = req.params;
-  const {first_name, last_name, email, role_id, user_name} = req.body;
+  const { id } = req.params;
+  const { first_name, last_name, email, role_id, user_name } = req.body;
 
-  try{
+  try {
     let userToUpdate = {};
 
-    if(last_name) userToUpdate.last_name = last_name;
-    if(first_name) userToUpdate.first_name = first_name;
-    if(email) userToUpdate.email = email;
-    if(role_id) userToUpdate.role_id = role_id;
-    if(user_name) userToUpdate.user_name = user_name;
+    if (last_name) userToUpdate.last_name = last_name;
+    if (first_name) userToUpdate.first_name = first_name;
+    if (email) userToUpdate.email = email;
+    if (role_id) userToUpdate.role_id = role_id;
+    if (user_name) userToUpdate.user_name = user_name;
 
     const updatedUser = await knex('users')
       .where({ id })
       .update(userToUpdate)
       .returning("*");
 
-    if(!updatedUser.length){
-      return res.status(404).json({message: "User Not Found!"})
+    if (!updatedUser.length) {
+      return res.status(404).json({ message: "User Not Found!" })
     }
 
     res.status(200).json(updatedUser);
-  }catch(err){
-    res.status(500).json({message: "Failed to update user"});
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update user" });
   }
 });
 
 app.delete('/users/delete/:id', async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params
 
-  try{
+  try {
     await knex('users')
-    .delete()
-    .where('id', id)
+      .delete()
+      .where('id', id)
 
-    res.status(200).json({message: "User Deleted"})
-  }catch(err){
-    res.status(500).json({message: "Failed to delete User."})
+    res.status(200).json({ message: "User Deleted" })
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete User." })
   }
 })
 
@@ -200,19 +206,19 @@ app.get('/user/:specificuser', authenticateToken, async (req, res) => {
   console.log(req.user.user)
 
   console.log(`User '${specificUserName}' has authenticated their token.`)
-  if(req.user.user === specificUserName){
-  try {
-    const userInfo = await knex.select('*').from('users').where({ user_name: specificUserName })
-    userInfo.map((e) => {
-      delete e.password
-    })
-    res.status(201).json(userInfo)
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve users data.' })
+  if (req.user.user === specificUserName) {
+    try {
+      const userInfo = await knex.select('*').from('users').where({ user_name: specificUserName })
+      userInfo.map((e) => {
+        delete e.password
+      })
+      res.status(201).json(userInfo)
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to retrieve users data.' })
+    }
+  } else {
+    res.status(500).json({ message: 'Failed' })
   }
-}else{
-  res.status(500).json({message: 'Failed'})
-}
 })
 
 
@@ -246,7 +252,7 @@ app.get('/exercises', authenticateToken, async (req, res) => {
 })
 
 app.post('/exercises', async (req, res) => {
-  const {name} = req.body;
+  const { name } = req.body;
   console.log(req.body)
   const newExercise = {
     name: name
@@ -271,15 +277,15 @@ app.get('/logs', async (req, res) => {
   console.log(req.body.user_id)
 
   console.log(`User '${specificUserId}' has logs`)
-  if(req.body.user_id === specificUserId){
-  try {
-    const userLogs = await knex.select('*').from('logs')
-    res.status(201).json(userLogs)
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve users logs.' })
-  }
-  }else{
-    res.status(500).json({message: 'Failed'})
+  if (req.body.user_id === specificUserId) {
+    try {
+      const userLogs = await knex.select('*').from('logs')
+      res.status(201).json(userLogs)
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to retrieve users logs.' })
+    }
+  } else {
+    res.status(500).json({ message: 'Failed' })
   }
 });
 
@@ -288,15 +294,15 @@ app.get('/logs/:id', async (req, res) => {
   console.log(req.params.id)
 
   console.log(`User '${specificUserId}' has logs`)
-  if(req.params.id === specificUserId){
-  try {
-    const userLogs = await knex.select('*').from('logs').where({ user_id: specificUserId })
-    res.status(201).json(userLogs)
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve users logs.' })
-  }
-  }else{
-    res.status(500).json({message: 'Failed'})
+  if (req.params.id === specificUserId) {
+    try {
+      const userLogs = await knex.select('*').from('logs').where({ user_id: specificUserId })
+      res.status(201).json(userLogs)
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to retrieve users logs.' })
+    }
+  } else {
+    res.status(500).json({ message: 'Failed' })
   }
 });
 
@@ -307,22 +313,22 @@ app.get('/workout/history/:id', async (req, res) => {
 
   try {
     const workoutHistory = await knex('workouts')
-    .where('user_id', id)
-    .join('activity', 'workouts.id', 'activity.workout_id')
-    .join('exercises', 'activity.exercise_id', 'exercises.id')
-    .join('sets', 'activity.id', 'sets.activity_id')
-    .select(
-      'workouts.id as workout_id',
-      'workouts.name as workout_name',
-      'workouts.workout_date',
-      'activity.id as activity_id',
-      'exercises.id as exercise_id',
-      'exercises.exercise_category_id as category_id',
-      'exercises.name as exercise_name',
-      'sets.reps',
-      'sets.weight',
-      'sets.distance'
-    );
+      .where('user_id', id)
+      .join('activity', 'workouts.id', 'activity.workout_id')
+      .join('exercises', 'activity.exercise_id', 'exercises.id')
+      .join('sets', 'activity.id', 'sets.activity_id')
+      .select(
+        'workouts.id as workout_id',
+        'workouts.name as workout_name',
+        'workouts.workout_date',
+        'activity.id as activity_id',
+        'exercises.id as exercise_id',
+        'exercises.exercise_category_id as category_id',
+        'exercises.name as exercise_name',
+        'sets.reps',
+        'sets.weight',
+        'sets.distance'
+      );
 
     const result = workoutHistory.reduce((accumulator, current) => {
       let workout = accumulator.find(e => e.id === current.workout_id);
@@ -365,16 +371,16 @@ app.get('/workout/history/:id', async (req, res) => {
 
 app.get('/plans', async (req, res) => {
   try {
-    const recipies = await knex('recipies')
-      .join('workouts_plan', 'recipies.id', 'workouts_plan.recipies_id')
+    const recipes = await knex('recipes')
+      .join('workouts_plan', 'recipes.id', 'workouts_plan.recipes_id')
       .join('activity_plan', 'workouts_plan.id', 'activity_plan.workout_plan_id')
       .join('exercises', 'activity_plan.exercise_id', 'exercises.id')
       .join('sets_plan', 'activity_plan.id', 'sets_plan.activity_plan_id')
       .select(
-        'recipies.name as plan_name',
-        'recipies.id as recipie_id',
-        'recipies.description as description',
-        'recipies.image as image',
+        'recipes.name as plan_name',
+        'recipes.id as recipe_id',
+        'recipes.description as description',
+        'recipes.image as image',
         'workouts_plan.id as workout_id',
         'workouts_plan.name as workout_name',
         'activity_plan.id as activity_id',
@@ -386,27 +392,27 @@ app.get('/plans', async (req, res) => {
         'sets_plan.distance'
       );
 
-    const result = recipies.reduce((accumulator, current) => {
-      let recipie = accumulator.find((e) => e.id === current.recipie_id);
-      if (!recipie) {
-        recipie = {
-          id: current.recipie_id,
+    const result = recipes.reduce((accumulator, current) => {
+      let recipe = accumulator.find((e) => e.id === current.recipe_id);
+      if (!recipe) {
+        recipe = {
+          id: current.recipe_id,
           name: current.plan_name,
           description: current.description,
           image: current.image,
           workouts: []
         };
-        accumulator.push(recipie);
+        accumulator.push(recipe);
       }
 
-      let workout = recipie.workouts.find(e => e.id === current.workout_id);
+      let workout = recipe.workouts.find(e => e.id === current.workout_id);
       if (!workout) {
         workout = {
           id: current.workout_id,
           name: current.workout_name,
           activity: []
         };
-        recipie.workouts.push(workout);
+        recipe.workouts.push(workout);
       }
 
       let activity = workout.activity.find(e => e.exercise_id === current.exercise_id);
@@ -430,16 +436,16 @@ app.get('/plans', async (req, res) => {
     }, [])
 
     res.status(200).json(result);
-  } catch(err) {
+  } catch (err) {
     console.error(err);
-    res.status(500).json({ message:"Failed to retrieve plans." });
+    res.status(500).json({ message: "Failed to retrieve plans." });
   }
 });
 
 
 
 app.post('/workout', async (req, res) => {
-  const {workouts, user_name, user_id} = req.body
+  const { workouts, user_name, user_id } = req.body
   const today = new Date();
   const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
@@ -474,38 +480,117 @@ app.post('/workout', async (req, res) => {
         .insert(setToAdd)
     }))
   }))
-  res.status(200).json({message: "success"})
+  res.status(200).json({ message: "success" })
 
 })
+//-----------------------------------------------------------------------------------------
+
+app.post('/recipe', async (req, res) => {
+  console.log('hi')
+  const { recipe } = req.body;
+
+  const recipeToAdd = {
+    name: recipe.name,
+    description: recipe.description,
+    image: recipe.image
+  };
+
+  const addedrecipe = await knex('recipes')
+    .insert(recipeToAdd)
+    .returning('*');
+
+  await Promise.all(recipe.workouts.map(async (e) => {
+    const workoutToAdd = {
+      name: e.name,
+      recipes_id: addedrecipe[0].id
+    };
+
+    const addedWorkout = await knex('workouts_plan')
+      .insert(workoutToAdd)
+      .returning('*');
+
+    await Promise.all(e.activity.map(async (i) => {
+
+      const activityToAdd = {
+        exercise_id: i.exercise_id,
+        workout_plan_id: addedWorkout[0].id
+      };
+
+      const addedActivity = await knex('activity_plan')
+        .insert(activityToAdd)
+        .returning('*');
+
+
+      await Promise.all(i.sets.map(async (j) => {
+        const setToAdd = {
+          reps: j.reps,
+          weight: j.weight,
+          distance: j.distance,
+          activity_plan_id: addedActivity[0].id
+        };
+
+        await knex('sets_plan').insert(setToAdd);
+      })
+      );
+    })
+    );
+  })
+  );
+
+  res.status(200).json({ message: 'success', addedrecipe: addedrecipe[0] });
+});
+
+
+
+
+
 
 //-------------------------------extra stuff----------------------------------------------------------
 
-app.get('/metrics/:id', async (req, res) => {
-  const {id} = req.params
+app.get('/metrics', async (req, res) => {
+  try {
+    const allMetrics = await knex('user_metrics').select('*')
+    res.status(200).json(allMetrics)
+  } catch (err) {
+    res.status(500).json({ message: "Failed to retrieve all metrics" })
+  }
+})
 
-  try{
+app.get('/metrics/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
     const userMetrics = await knex('user_metrics')
-    .select('*')
-    .where('user_id', id)
+      .select('*')
+      .where('user_id', id)
 
     res.status(200).json(userMetrics)
-  }catch(err){
-    res.status(500).json({message:"Failed to retrieve metrics"})
+  } catch (err) {
+    res.status(500).json({ message: "Failed to retrieve metrics" })
+  }
+})
+
+app.get('/ptTests', async (req, res) => {
+  try {
+    const allPtTests = await knex('pt_tests').select('*')
+    res.status(200).json(allPtTests)
+  } catch (err) {
+    res.status(500).json({ message: "Failed to retrieve all metrics" })
   }
 })
 
 app.get('/ptTests/:id', async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params
 
-  try{
+  try {
     const userTests = await knex('pt_tests')
-    .select('*')
-    .where('user_id', id)
-    .orderBy('test_date', 'desc')
+      .select('*')
+      .where('user_id', id)
+      .orderBy('test_date', 'desc')
 
     res.status(200).json(userTests)
-  }catch(err){
-    res.status(500).json({message: 'Failed to retrieve tests'})
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve tests' })
   }
 })
 
@@ -537,29 +622,29 @@ app.get('/ptTests/:id', async (req, res) => {
 //     res.status(201).json(addedLogResponse)
 //   } catch (err) {
 //     res.status(500).json(err.message)
-  // }
+// }
 //////////////////////// set_reps ROUTE/////////////////////////
 app.get('/set_reps', async (req, res) => {
   const specificUserId = req.body.user_id
   console.log(req.body.user_id)
 
   console.log(`set_reps'${specificUserId}' has logs`)
-  if(req.body.user_id === specificUserId){
-  try {
-    const userLogs = await knex.select('*').from('set_reps')
-    res.status(201).json(userLogs)
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve set_reps.' })
-  }
-  }else{
-    res.status(500).json({message: 'Failed'})
+  if (req.body.user_id === specificUserId) {
+    try {
+      const userLogs = await knex.select('*').from('set_reps')
+      res.status(201).json(userLogs)
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to retrieve set_reps.' })
+    }
+  } else {
+    res.status(500).json({ message: 'Failed' })
   }
 });
 
 app.post('/set_reps', async (req, res) => {
-  const { name, sets, reps} = req.body;
+  const { name, sets, reps } = req.body;
   console.log(req.body)
-  const newSetRep = { 
+  const newSetRep = {
     name: name,
     sets: sets,
     reps: reps,
@@ -575,19 +660,8 @@ app.post('/set_reps', async (req, res) => {
     res.status(201).json(addedLogResponse)
   } catch (err) {
     res.status(500).json(err.message)
-  }})
-
-  //////////////////////// workout_plan ROUTE/////////////////////////
-
-  app.get('/workouts', async (req, res) => {
-
-  })
-
-  //////////////////////// exercise_plan ROUTE////////////////////////
-
-  app.get('/exercise_plane', async (req, res) => {
-    
-  })
+  }
+})
 
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
 app.listen(port, () => {
