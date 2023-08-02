@@ -478,6 +478,37 @@ app.post('/workout', async (req, res) => {
 
 })
 
+//-------------------------------extra stuff----------------------------------------------------------
+
+app.get('/metrics/:id', async (req, res) => {
+  const {id} = req.params
+
+  try{
+    const userMetrics = await knex('user_metrics')
+    .select('*')
+    .where('user_id', id)
+
+    res.status(200).json(userMetrics)
+  }catch(err){
+    res.status(500).json({message:"Failed to retrieve metrics"})
+  }
+})
+
+app.get('/ptTests/:id', async (req, res) => {
+  const {id} = req.params
+
+  try{
+    const userTests = await knex('pt_tests')
+    .select('*')
+    .where('user_id', id)
+    .orderBy('test_date', 'desc')
+
+    res.status(200).json(userTests)
+  }catch(err){
+    res.status(500).json({message: 'Failed to retrieve tests'})
+  }
+})
+
 
 
 
