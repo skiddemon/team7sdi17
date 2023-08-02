@@ -6,8 +6,8 @@ exports.up = function(knex) {
   return knex.schema.createTable('workouts_plan', table => {
     table.increments();
     table.string('name');
-    table.integer('recipies_id');
-    table.foreign('recipies_id').references('recipies.id')
+    table.integer('recipes_id');
+    table.foreign('recipes_id').references('recipes.id')
   })
 };
 
@@ -17,7 +17,7 @@ exports.up = function(knex) {
  */
 exports.down = function(knex) {
   return knex.schema.alterTable('workouts_plan', table => {
-    table.dropForeign('recipies_id')
+    table.dropForeign('recipes_id')
   })
   .then(function(){
     return knex.schema.dropTableIfExists('workouts_plan')
