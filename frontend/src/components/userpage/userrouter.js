@@ -7,6 +7,7 @@ import AdminPage from '../adminpage/adminpage';
 import SMEPage from '../smepage/sme';
 import NewWorkout from './newworkout.js'
 import FindPlan from '../plans/findplan.js'
+import History from '../history/history.js'
 
 
 export default function UserPage() {
@@ -112,6 +113,7 @@ export default function UserPage() {
                 <Route path='governator' element={<SMEPage />} />
                 <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData}/>} />
                 <Route path='findPlan/*' element={<FindPlan />} />
+                <Route path='history' element={<History />} />
             </Routes>
         </>
     )
