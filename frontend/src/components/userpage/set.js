@@ -3,21 +3,16 @@ import { AiOutlineCheckCircle, AiFillDelete, AiFillEdit } from "react-icons/ai";
 
 import React, {useState} from 'react'
 
-export default function Set({set, setIndex, workout, handleSetChange}){
+export default function Set({set, setIndex, workout, workoutIndex, updateSet, deleteSet}){
   const [reps, setReps] = useState(set.reps)
   const [weight, setWeight] = useState(set.weight)
   const [distance, setDistance] = useState(set.distance)
-  const [disabled, setDisabled] = useState(false)
-  const [deletedItem, setDeletedItem] = useState([]);
+  const [disabled, setDisabled] = useState(set.completed)
 
-  const updateSet = (e) => {
-    const newSetValues = {reps: reps, weight: weight, distance: distance}
-    handleSetChange(newSetValues)
-  }
-  const deleteSet = (setIndex) =>  {
-    workout.sets.splice(setIndex,1)
-    setDeletedItem(setIndex)
-    //console.log ('workout set '  + workout.sets[setIndex].reps)
+
+  const update = (e) => {
+    const newSetValues = {reps: reps, weight: weight, distance: distance, completed: !disabled}
+    updateSet(workoutIndex, setIndex, newSetValues)
   }
 
   return (
@@ -71,9 +66,9 @@ export default function Set({set, setIndex, workout, handleSetChange}){
   {disabled ? (
     <AiFillEdit className="cursor-pointer" onClick={() => setDisabled(false)}/>
   ) : (
-    <AiOutlineCheckCircle className="cursor-pointer" onClick={() => {setDisabled(true); updateSet()}}/>
+    <AiOutlineCheckCircle className="cursor-pointer" onClick={() => {setDisabled(true); update()}}/>
   )}
-  <AiFillDelete onClick={() => {deleteSet(setIndex)}} alt="Delete Individual Set" className="cursor-pointer"/>
+  <AiFillDelete onClick={() => {deleteSet(workoutIndex, setIndex)}} alt="Delete Individual Set" className="cursor-pointer"/>
 </div>
 
       </form>

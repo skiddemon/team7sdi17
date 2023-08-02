@@ -1,15 +1,18 @@
-import {Card, Dropdown, Button, Accordion, Label, TextInput} from 'flowbite-react'
-import React, {useState, useCallback} from 'react'
+import {Card, Dropdown, Button, Accordion} from 'flowbite-react'
+import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import Set from './set.js'
-import { AiOutlineCheckCircle, AiFillDelete } from "react-icons/ai";
 
 export default function NewWorkout({ userData, exercises }){
   const [workouts, setWorkouts] = useState([])
-  const [deletedItem, setDeletedItem] = useState([]);
+
+
   const Navigate = useNavigate()
 
+
+
   const submitWorkout = () => {
+    console.log(workouts)
     const workoutData = {
       user_id: userData[0].id,
       user_name: userData[0].user_name,
@@ -36,16 +39,28 @@ export default function NewWorkout({ userData, exercises }){
     ]);
   }
 
+  const updateSet = (workoutIndex, setIndex, newSet) => {
+    setWorkouts(prevWorkouts => {
+      const newWorkouts = [...prevWorkouts];
+      newWorkouts[workoutIndex].sets[setIndex] = newSet;
+      return newWorkouts;
+    });
+  };
+
+
   const Sets = ({ workout, setWorkouts, workoutIndex }) => {
+    console.log(workoutIndex)
+    const deleteSet = (workoutIndex, setIndex) => {
+      setWorkouts(prevWorkouts => {
+        const newWorkouts = [...prevWorkouts];
+        newWorkouts[workoutIndex].sets.splice(setIndex, 1);
+        return newWorkouts;
+      });
+    };
+
     return workout.sets.map((e, setIndex) => {
-      const handleSetChange = (newSetValues) => {
-        setWorkouts((prevWorkouts) => {
-          const newWorkouts = [...prevWorkouts];
-          newWorkouts[workoutIndex].sets[setIndex] = newSetValues;
-          return newWorkouts;
-        });
-      };
-      return <Set key={setIndex} set={e} workout={workout} setIndex={setIndex} handleSetChange={handleSetChange}/>
+      console.log(workouts)
+      return <Set key={setIndex} set={e} workout={workout} updateSet={updateSet} workoutIndex = {workoutIndex} setIndex={setIndex} deleteSet={deleteSet}/>
     });
   };
 
@@ -58,7 +73,8 @@ export default function NewWorkout({ userData, exercises }){
         newWorkouts[index].sets.push({
             reps: 0,
             weight: 0,
-            distance: 0
+            distance: 0,
+            completed:false
         });
         console.log(newWorkouts)
         return newWorkouts;
@@ -66,9 +82,13 @@ export default function NewWorkout({ userData, exercises }){
 }
 
 const handleDeleteExercise = (index) => {
-  workouts.splice(index,1)
-  setDeletedItem(index);
-}
+  setWorkouts(prevWorkouts => {
+    const newWorkouts = [...prevWorkouts];
+    newWorkouts.splice(index, 1);
+    return newWorkouts;
+  });
+};
+
 
   const List = () => {
     return exercises.map((e) => <Dropdown.Item key={e.exercise_id} onClick={() => addToWorkouts(e)}>{e.exercise_name}</Dropdown.Item>)
