@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import Set from './set.js'
 import { ModalHeader } from 'flowbite-react/lib/esm/components/Modal/ModalHeader.js'
 import { ModalBody } from 'flowbite-react/lib/esm/components/Modal/ModalBody.js'
+import Cookies from 'js-cookie'
 
-export default function NewWorkout({ userData, exercises, selectedWorkout }) {
+export default function NewWorkout({ userData, exercises, selectedWorkout, contPlan }) {
   const [workouts, setWorkouts] = useState([]);
   const [submitWorkoutButton, setSubmitWorkoutButton] = useState(false)
   const [nameWorkoutModal, setNameWorkoutModal] = useState(false);
@@ -13,20 +14,38 @@ export default function NewWorkout({ userData, exercises, selectedWorkout }) {
   const [workoutPlanDescription, setWorkoutPlanDescription] = useState('');
   const [workoutImage, setWorkoutImage] = useState('');
   const [openModal, setOpenModal] = useState('');
-  
+  const [switchSubmit, setSwitchSubmit] = useState(false)
+  const [contId, setContId] = useState(null)
+  const token = Cookies.get('token')
+
   const Navigate = useNavigate()
   const today = new Date();
   const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  
+
+  const retrievePlanWorkout = () => {
+    fetch(`http://localhost:8080/nextWorkout/${contPlan}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+      }
+  })
+  .then(res => res.json())
+  .then(data => {setContId(data[0].id); setWorkouts(data[0].activity)})
+  .then(() => {setSubmitWorkoutButton(true); setSwitchSubmit(true)})
+  }
+
   useEffect(() => {
-    console.log(selectedWorkout)
+    console.log(contPlan)
     if (selectedWorkout) {
         setWorkouts(selectedWorkout.activity)
         setSubmitWorkoutButton(true)
+      }else if(contPlan){
+        retrievePlanWorkout()
       }
-      console.log(workouts)
 
-  }, [selectedWorkout])
+
+  }, [selectedWorkout, contPlan])
 
   const submitWorkout = () => {
     console.log('newworkout ', workouts)
@@ -44,6 +63,33 @@ export default function NewWorkout({ userData, exercises, selectedWorkout }) {
     })
       .then(res => res.json())
       .then(() => Navigate(`/user/${userData[0].user_name}`))
+  }
+
+  const patchWorkout = () => {
+    const workoutData = {
+      workouts:{
+      user_id: userData[0].id,
+      user_name: userData[0].user_name,
+      completed: true,
+      activity: workouts
+      }
+    }
+
+    fetch(`http://localhost:8080/workout/${contId}`, {
+      method: "PATCH",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(workoutData)
+    })
+    .then(res => res.json())
+    .then(() => Navigate(`/user/${userData[0].user_name}`))
+  }
+
+  const submit = () => {
+    if(!switchSubmit){
+      submitWorkout()
+    }else if(switchSubmit){
+      patchWorkout()
+    }
   }
 
   const addToWorkouts = (e) => {
@@ -142,23 +188,6 @@ export default function NewWorkout({ userData, exercises, selectedWorkout }) {
   }
 
   const postWorkoutPlan = (data) => {
-    //const recipe = {}
-    //recipe.name = workoutPlanName
-    //recipe.description = workoutPlanDescription
-    //recipe.image = workoutImage
-    //recipe.workouts = []
-
-    // workouts.forEach((workout => {
-    //   recipe.workouts.push(workout)
-    //   console.log('Exercise name: ', workout.exercise_name)
-    //   workout.sets.forEach((set) => {
-    //     console.log('Sets: ', set.reps)
-    //     console.log('Weight: ', set.weight)
-    //     console.log('Distance: ', set.distance)
-    //     console.log('Is Completed: ', set.completed)
-
-      // })
-    // }))
     const workoutData = {
       user_id: userData[0].id,
       user_name: userData[0].user_name,
@@ -185,7 +214,7 @@ export default function NewWorkout({ userData, exercises, selectedWorkout }) {
           </Dropdown.Header>
           <List alt="exercise list" />
         </Dropdown>
-        <Button disabled={!submitWorkoutButton} onClick={() => submitWorkout()}>Log Workout</Button>
+        <Button disabled={!submitWorkoutButton} onClick={() => submit()}>Log Workout</Button>
         {/* louis */}
         {submitWorkoutButton ? <Button onClick={() => handleCreateWorkout()} className="w-fit" alt="Delete this Exercise and Sets">Save As Workout Template</Button> : ''}
         {/* /louis  */}

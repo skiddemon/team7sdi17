@@ -18,6 +18,7 @@ export default function UserPage() {
     const [adminMode, setAdminMode] = useState(false);
     const [smeMode, setSmeMode] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState(null)
+    const [contPlan, setContPlan] = useState(null)
 
     const Navigate = useNavigate()
     const token = Cookies.get('token')
@@ -39,7 +40,7 @@ export default function UserPage() {
             console.log('Failed')
         }
     }
-    
+
     useEffect(() => {
         if (!token) {
             Navigate('/')
@@ -80,7 +81,7 @@ export default function UserPage() {
             <header className='w-full h-20 bg-yellow-100'>
                 <Card>
                     <div className="flex items-center justify-between">
-                        <h1 className="w-fit cursor-pointer" onClick={()=> {
+                        <h1 className="w-fit cursor-pointer" onClick={()=> {setContPlan(null);
         setSelectedWorkout(null); Navigate(`/user/${userData[0].user_name}`)}}>Final Project</h1>
                         <div className="flex gap-10">
                             {userData[0].role_id === 1
@@ -109,10 +110,10 @@ export default function UserPage() {
                 </Card>
             </header>
             <Routes>
-                <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} />} />
+                <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} setContPlan={setContPlan}/>} />
                 <Route path='adminTools' element={<AdminPage />} />
                 <Route path='governator' element={<SMEPage />} />
-                <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData} selectedWorkout={selectedWorkout}/>} />
+                <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData} selectedWorkout={selectedWorkout} contPlan={contPlan}/>} />
                 <Route path='findPlan/*' element={<FindPlan />} />
                 <Route path='history' element={<History />} />
                 <Route path='savedworkouts' element={<SavedWorkouts setSelectedWorkout={setSelectedWorkout} />} />
