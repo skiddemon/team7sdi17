@@ -6,7 +6,7 @@ import DataView from './dataview.js'
 import ContinuePlan from './continueplan.js'
 import history from '../history/history.js'
 
-export default function UserPageMain({ userData, exercises }) {
+export default function UserPageMain({ userData, exercises, setContPlan}) {
   const Navigate = useNavigate()
 
   if (userData.length < 1 || exercises.length < 1) {
@@ -25,7 +25,7 @@ export default function UserPageMain({ userData, exercises }) {
         <DataView />
         </div>
         <div className="">
-        <ContinuePlan />
+        <ContinuePlan setContPlan={setContPlan}/>
         </div>
 
       </div>

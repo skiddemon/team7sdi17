@@ -31,12 +31,14 @@ console.log(selectedPlan)
 
   const RenderSets = ({category, sets}) => {
     return sets.map((e, index)=>{
-      return category !== 2 ? <li>Set {index + 1}: {e.reps} Reps</li> : <li>Sets: {sets.length} Distance: {e.distance}</li>
+      console.log(category)
+      return category !== 2 ? <li>Set {index + 1}: {e.reps} Reps</li> : <li>Set {sets.length}: {Math.round((e.distance / 1.609)*100)/100} Miles</li>
     })
   }
 
   const RenderActivities = ({activities}) => {
     return activities.map((e)=>{
+      console.log(e)
       console.log(`sets: ${e.sets}`)
       return (
         <li>
@@ -44,7 +46,7 @@ console.log(selectedPlan)
             {e.exercise_name}
           </div>
           <ol>
-            <RenderSets category={e.category} sets={e.sets}/>
+            <RenderSets category={e.category_id} sets={e.sets}/>
           </ol>
         </li>
       )

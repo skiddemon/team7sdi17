@@ -15,7 +15,8 @@ export default function UserPage() {
     const [exercises, setExercises] = useState([]);
     const [userData, setUserData] = useState([]);
     const [adminMode, setAdminMode] = useState(false);
-    const [smeMode, setSmeMode] = useState(false)
+    const [smeMode, setSmeMode] = useState(false);
+    const [contPlan, setContPlan] = useState(null)
 
     const Navigate = useNavigate()
     const token = Cookies.get('token')
@@ -107,10 +108,10 @@ export default function UserPage() {
                 </Card>
             </header>
             <Routes>
-                <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} />} />
+                <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} setContPlan={setContPlan}/>} />
                 <Route path='adminTools' element={<AdminPage />} />
                 <Route path='governator' element={<SMEPage />} />
-                <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData}/>} />
+                <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData} contPlan={contPlan}/>} />
                 <Route path='findPlan/*' element={<FindPlan />} />
                 <Route path='history' element={<History />} />
             </Routes>

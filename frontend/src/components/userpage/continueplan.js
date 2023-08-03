@@ -4,10 +4,11 @@ import {useNavigate} from 'react-router-dom'
 import Cookies from 'js-cookie'
 
 
-export default function ContinuePlane(){
+export default function ContinuePlane({setContPlan}){
   const [plans, setPlans] = useState([]);
   const userid = Cookies.get('userId');
   const token = Cookies.get('token')
+  const Navigate = useNavigate()
 
   const PlanCard = () => {
     return plans.map((e) => {
@@ -16,7 +17,7 @@ export default function ContinuePlane(){
           <img src={e.image} alt={e.name} width={100} height={100}/>
           {e.name}
           {e.description}
-          <Button>Continue Plan</Button>
+          <Button onClick={() => {setContPlan(e); Navigate('newWorkout')}}>Continue Plan</Button>
         </Card>
       )
     })
