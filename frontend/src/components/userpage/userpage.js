@@ -16,7 +16,7 @@ export default function UserPageMain({ userData, exercises }) {
     <div>
       <div className="flex mt-10 gap-10 justify-center">
         <Button className="w-40" onClick={() => Navigate('newWorkout')}>New Workout</Button>
-        <Button className="w-40" onClick={() => Navigate('history')}>Wokout History</Button>
+        <Button className="w-40" onClick={() => Navigate('history')}>Workout History</Button>
         <Button className="w-40" onClick={() => Navigate('findPlan')}>Find Plan</Button>
       </div>
       <div className="mt-10">
