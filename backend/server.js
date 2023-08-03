@@ -336,6 +336,7 @@ app.get('/workout/history/:id', async (req, res) => {
           workout = {
             id: current.workout_id,
             name: current.workout_name,
+            workout_date: current.workout_date,
             activity: []
           };
           accumulator.push(workout);
@@ -504,6 +505,7 @@ app.get('/workoutplan/:id', async (req, res) => {
       .select(
         'user_workouts.id as workout_id',
         'user_workouts.name as workout_name',
+
         'user_activity.id as activity_id',
         'exercises.id as exercise_id',
         'exercises.exercise_category_id as exercise_category_id',

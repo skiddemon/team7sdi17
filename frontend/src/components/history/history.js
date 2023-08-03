@@ -25,32 +25,39 @@ export default function History(){
     }, [])
 
     const WorkoutCard = () => {
-        const mapSets = (sets, category) => {
+        const mapSets = (sets) => {
             let repCount = 0;
             let weightMoved = 0;
+            let totalDistance = 0
             sets.forEach((e, index) => {
                 repCount += e.reps;
                 weightMoved += e.weight;
-
-                // return (
-                //     <div>
-                //     {(category === 1 || category === 3) ? <p>{`Set ${index +1}: ${e.reps} Reps @ ${e.weight} lbs`}</p> : <p>{`Set ${index + 1}: ${e.distance} km`}</p>}
-                //     {}
-                //     </div>
-                // )
+                totalDistance += e.distance;
             })
            return(
-             <p>{repCount} {weightMoved}</p>
+            <>
+             <Table.Cell>
+                {repCount}
+             </Table.Cell>
+             <Table.Cell>
+                {weightMoved} lbs
+             </Table.Cell>
+             <Table.Cell>
+                {totalDistance} km
+             </Table.Cell>
+             </>
            )
         }
 
         const mapActivity = (activity) => {
             return activity.map((e, index) => {
                 return (
-                    <div>
-                        <p>{e.exercise_name}</p>
-                        {mapSets(e.sets, e.category_id)}
-                    </div>
+                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                        {e.exercise_name}
+                        </Table.Cell>
+                        {mapSets(e.sets)}
+                    </Table.Row>
 
                 )
             })
@@ -58,83 +65,50 @@ export default function History(){
 
        return userHistory.map((e, index) => {
             console.log(e)
-           return( <Card>
-                <p>{`Exercise Name: ${e.name}`}</p>
-                {mapActivity(e.activity)}
-                </Card>
+            const dateStr = "2023-08-03T06:00:00.000Z";
+            const date = new Date(dateStr);
+            const formattedDate = date.toLocaleDateString("en-CA");
+           return(
+            <div className="w-1/2">
+            <Table>
+            <Table.Head>
+                    <Table.HeadCell>
+                        Workout Name: {e.name}
+                    </Table.HeadCell>
+                    <Table.HeadCell>
+                        Workout Date: {formattedDate}
+                    </Table.HeadCell>
+                </Table.Head>
+            </Table>
+            <Table>
+                <Table.Head>
+                    <Table.HeadCell>
+                        EXERCISE
+                    </Table.HeadCell>
+                    <Table.HeadCell>
+                        REPS
+                    </Table.HeadCell>
+                    <Table.HeadCell>
+                        WEIGHT
+                    </Table.HeadCell>
+                    <Table.HeadCell>
+                        DISTANCE
+                    </Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="divide-y">
+                    {mapActivity(e.activity)}
+                </Table.Body>
+            </Table>
+            </div>
            )
         } )
     }
 
     return (
-        <div className="grid md:grid-cols-3 sm:grid-cols-1 m-10 gap-5">
+        <div className="flex flex-col items-center justify-center mt-20 gap-5">
          <WorkoutCard />
         </div>
     )
 }
 
 
-{/* <div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    {e.name}
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Color
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Category
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Price
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
-                </th>
-                <td class="px-6 py-4">
-                    Silver
-                </td>
-                <td class="px-6 py-4">
-                    Laptop
-                </td>
-                <td class="px-6 py-4">
-                    $2999
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Microsoft Surface Pro
-                </th>
-                <td class="px-6 py-4">
-                    White
-                </td>
-                <td class="px-6 py-4">
-                    Laptop PC
-                </td>
-                <td class="px-6 py-4">
-                    $1999
-                </td>
-            </tr>
-            <tr class="bg-white dark:bg-gray-800">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Magic Mouse 2
-                </th>
-                <td class="px-6 py-4">
-                    Black
-                </td>
-                <td class="px-6 py-4">
-                    Accessories
-                </td>
-                <td class="px-6 py-4">
-                    $99
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div> */}
