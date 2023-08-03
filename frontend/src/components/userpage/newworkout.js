@@ -1,11 +1,11 @@
 import { Card, Dropdown, Button, Accordion, TextInput, Modal, Textarea } from 'flowbite-react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Set from './set.js'
 import { ModalHeader } from 'flowbite-react/lib/esm/components/Modal/ModalHeader.js'
 import { ModalBody } from 'flowbite-react/lib/esm/components/Modal/ModalBody.js'
 
-export default function NewWorkout({ userData, exercises }) {
+export default function NewWorkout({ userData, exercises, selectedWorkout }) {
   const [workouts, setWorkouts] = useState([]);
   const [submitWorkoutButton, setSubmitWorkoutButton] = useState(false)
   const [nameWorkoutModal, setNameWorkoutModal] = useState(false);
@@ -13,18 +13,27 @@ export default function NewWorkout({ userData, exercises }) {
   const [workoutPlanDescription, setWorkoutPlanDescription] = useState('');
   const [workoutImage, setWorkoutImage] = useState('');
   const [openModal, setOpenModal] = useState('');
-
+  
   const Navigate = useNavigate()
   const today = new Date();
   const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  
+  useEffect(() => {
+    console.log(selectedWorkout)
+    if (selectedWorkout) {
+        setWorkouts(selectedWorkout.activity)
+        setSubmitWorkoutButton(true)
+      }
+      console.log(workouts)
 
+  }, [selectedWorkout])
 
   const submitWorkout = () => {
     console.log('newworkout ', workouts)
     const workoutData = {
       user_id: userData[0].id,
       user_name: userData[0].user_name,
-      name:`${userData[0].user_name} ${dateString}`,
+      name: `${userData[0].user_name} ${dateString}`,
       completed: true,
       workouts: workouts,
     }
@@ -133,56 +142,36 @@ export default function NewWorkout({ userData, exercises }) {
   }
 
   const postWorkoutPlan = (data) => {
-    const recipe = {}
-    recipe.name = workoutPlanName
-    recipe.description = workoutPlanDescription
-    recipe.image = workoutImage
-    recipe.workouts = []
+    //const recipe = {}
+    //recipe.name = workoutPlanName
+    //recipe.description = workoutPlanDescription
+    //recipe.image = workoutImage
+    //recipe.workouts = []
 
-    workouts.forEach((workout => {
-      recipe.workouts.push(workout)
-        console.log('Exercise name: ',workout.exercise_name)
-        workout.sets.forEach((set) => {
-          console.log('Sets: ', set.reps)
-          console.log('Weight: ', set.weight)
-          console.log('Distance: ', set.distance)
-          console.log('Is Completed: ', set.completed)
+    // workouts.forEach((workout => {
+    //   recipe.workouts.push(workout)
+    //   console.log('Exercise name: ', workout.exercise_name)
+    //   workout.sets.forEach((set) => {
+    //     console.log('Sets: ', set.reps)
+    //     console.log('Weight: ', set.weight)
+    //     console.log('Distance: ', set.distance)
+    //     console.log('Is Completed: ', set.completed)
 
-        })
-
-
-
-  // {
-    //   "recipe": {
-    //     "name": "Hulk",
-    //       "description": "Be strong like Hulk, crush gods",
-    //         "image": "https://i.etsystatic.com/36935296/r/il/270953/4827405475/il_794xN.4827405475_t7hn.jpg",
-    //           "workouts": [
-    //             {
-    //               "name": "Hulk Chest",
-    //               "activity": [
-    //                 {
-    //                   "exercise_id": 1,
-    //                   "sets": [
-    //                     {
-    //                       "reps": 10
-    //                     },
-    //                     {
-    //                       "reps": 10
-    //                     },
-    //                     {
-    //                       "reps": 10
-    //                     }
-    //                   ]
-    //                 }
-    //               ]
-    //             }
-    //           ]
-    //   }
-    // }
-      
-    }))
-    console.log(recipe)
+      // })
+    // }))
+    const workoutData = {
+      user_id: userData[0].id,
+      user_name: userData[0].user_name,
+      name: workoutPlanName,
+      workouts: workouts,
+    }
+    fetch('http://localhost:8080/workoutplan', {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(workoutData)
+    })
+      .then(res => res.json())
+      .then(() => submitWorkout())
   }
 
   return (
@@ -196,7 +185,7 @@ export default function NewWorkout({ userData, exercises }) {
           </Dropdown.Header>
           <List alt="exercise list" />
         </Dropdown>
-        <Button disabled={!submitWorkoutButton} onClick={() => submitWorkout()}>Submit Workout</Button>
+        <Button disabled={!submitWorkoutButton} onClick={() => submitWorkout()}>Log Workout</Button>
         {/* louis */}
         {submitWorkoutButton ? <Button onClick={() => handleCreateWorkout()} className="w-fit" alt="Delete this Exercise and Sets">Save As Workout Template</Button> : ''}
         {/* /louis  */}
@@ -211,33 +200,33 @@ export default function NewWorkout({ userData, exercises }) {
         <Modal show={openModal === 'default'} onClose={() => setOpenModal(undefined)} className=''>
           <ModalHeader>New Workout:</ModalHeader>
           <ModalBody>
-          <TextInput
-          className='mb-3'
-            id="workoutPlanName"
-            value={workoutPlanName}
-            onChange={(e) => setWorkoutPlanName(e.target.value)}
-            placeholder="Workout Name"
-            type="text"
-            required
-          ></TextInput>
-          <Textarea
-            className='mb-3 text-sm'
-            id="workoutPlanDesc"
-            value={workoutPlanDescription}
-            onChange={(e) => setWorkoutPlanDescription(e.target.value)}
-            placeholder="Description"
-            type="text"
-            required
-          ></Textarea>
-          <Textarea
-            className='mb-3 text-sm'
-            id="workoutPlanImg"
-            value={workoutImage}
-            onChange={(e) => setWorkoutImage(e.target.value)}
-            placeholder="Image Link (Optional)"
-            type="text"
-          ></Textarea>
-          <Button onClick={() => postWorkoutPlan()} className="w-fit " >Submit</Button>
+            <TextInput
+              className='mb-3'
+              id="workoutPlanName"
+              value={workoutPlanName}
+              onChange={(e) => setWorkoutPlanName(e.target.value)}
+              placeholder="Workout Name"
+              type="text"
+              required
+            ></TextInput>
+            <Textarea
+              className='mb-3 text-sm'
+              id="workoutPlanDesc"
+              value={workoutPlanDescription}
+              onChange={(e) => setWorkoutPlanDescription(e.target.value)}
+              placeholder="Description"
+              type="text"
+              required
+            ></Textarea>
+            <Textarea
+              className='mb-3 text-sm'
+              id="workoutPlanImg"
+              value={workoutImage}
+              onChange={(e) => setWorkoutImage(e.target.value)}
+              placeholder="Image Link (Optional)"
+              type="text"
+            ></Textarea>
+            <Button onClick={() => postWorkoutPlan()} className="w-fit " >Save and Log Workout</Button>
           </ModalBody>
         </Modal>
       </div>

@@ -493,39 +493,99 @@ app.post('/workout', async (req, res) => {
 
 
 //////////////////////////////  WORKOUTPLAN ENDPOINT  /////////////////////////////
+app.get('/workoutplan/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const workoutHistory = await knex('user_workouts')
+      .where('user_id', id)
+      .join('user_activity', 'user_workouts.id', 'user_activity.user_workout_id')
+      .join('exercises', 'user_activity.exercise_id', 'exercises.id')
+      .join('user_sets', 'user_activity.id', 'user_sets.user_activity_id')
+      .select(
+        'user_workouts.id as workout_id',
+        'user_workouts.name as workout_name',
+        'user_activity.id as activity_id',
+        'exercises.id as exercise_id',
+        'exercises.exercise_category_id as category_id',
+        'exercises.name as exercise_name',
+        'user_sets.reps',
+        'user_sets.weight',
+        'user_sets.distance'
+      );
+
+      const result = workoutHistory.reduce((accumulator, current) => {
+        let workout = accumulator.find(e => e.id === current.workout_id);
+        if (!workout) {
+          workout = {
+            id: current.workout_id,
+            name: current.workout_name,
+            activity: []
+          };
+          accumulator.push(workout);
+        }
+
+        let activity = workout.activity.find(e => e.exercise_id === current.exercise_id);
+        if (!activity) {
+          activity = {
+            exercise_id: current.exercise_id,
+            exercise_name: current.exercise_name,
+            category_id: current.category_id,
+            sets: []
+          };
+          workout.activity.push(activity);
+        }
+
+        activity.sets.push({
+          reps: current.reps,
+          weight: current.weight,
+          distance: current.distance,
+          completed: current.completed
+        });
+
+        return accumulator;
+        }, [])
+
+    res.status(200).json(result);
+
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: "Fetch error"})
+  }
+})
+
 app.post('/workoutplan', async (req, res) => {
-  const { workouts, user_name, user_id } = req.body
+  const { workouts, user_name, user_id, name } = req.body
   const today = new Date();
-  const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  
 
   const workoutToAdd = {
-    name: `${user_name} ${dateString}`,
+    name: name,
     user_id: user_id,
-    workout_date: dateString
   }
 
-  const addedWorkout = await knex('workouts')
+  const addedWorkout = await knex('user_workouts')
     .insert(workoutToAdd)
     .returning("*")
 
   await Promise.all(workouts.map(async (e) => {
     const activityToAdd = {
       exercise_id: e.exercise_id,
-      workout_id: addedWorkout[0].id
+      user_workout_id: addedWorkout[0].id
     }
 
-    const addedActivity = await knex('activity')
+    const addedActivity = await knex('user_activity')
       .insert(activityToAdd)
       .returning("*")
 
     await Promise.all(e.sets.map(async (i) => {
       const setToAdd = {
-        reps: i.reps,
-        weight: i.weight,
-        distance: i.distance,
-        activity_id: addedActivity[0].id
+        reps: 0,
+        weight: 0,
+        distance: 0,
+        completed: false,
+        user_activity_id: addedActivity[0].id
       }
-      await knex('sets')
+      await knex('user_sets')
         .insert(setToAdd)
     }))
   }))

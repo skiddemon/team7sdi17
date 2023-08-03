@@ -19,6 +19,7 @@ export default function UserPageMain({ userData, exercises, setContPlan}) {
         <Button className="w-40" onClick={() => Navigate('newWorkout')}>New Workout</Button>
         <Button className="w-40" onClick={() => Navigate('history')}>Workout History</Button>
         <Button className="w-40" onClick={() => Navigate('findPlan')}>Find Plan</Button>
+        <Button className="w-40" onClick={() => Navigate('savedworkouts')}>Saved Workouts</Button>
       </div>
       <div className="mt-10 grid grid-cols-2">
         <div>
