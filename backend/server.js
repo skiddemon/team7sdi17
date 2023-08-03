@@ -491,7 +491,6 @@ app.post('/workout', async (req, res) => {
 
 })
 
-
 //////////////////////////////  WORKOUTPLAN ENDPOINT  /////////////////////////////
 app.get('/workoutplan/:id', async (req, res) => {
   const { id } = req.params
