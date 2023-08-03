@@ -4,6 +4,8 @@ import { AiOutlineCheckCircle, AiFillDelete, AiFillEdit } from "react-icons/ai";
 import React, {useState} from 'react'
 
 export default function Set({set, setIndex, workout, workoutIndex, updateSet, deleteSet}){
+  console.log(set)
+  console.log(workout)
   const [reps, setReps] = useState(set.reps)
   const [weight, setWeight] = useState(set.weight)
   const [distance, setDistance] = useState(set.distance)
@@ -11,7 +13,7 @@ export default function Set({set, setIndex, workout, workoutIndex, updateSet, de
 
 
   const update = (e) => {
-    const newSetValues = {reps: reps, weight: weight, distance: distance, completed: !disabled}
+    const newSetValues = {id: set.id, reps: reps, weight: weight, distance: distance, completed: !disabled}
     updateSet(workoutIndex, setIndex, newSetValues)
   }
 
@@ -34,7 +36,7 @@ export default function Set({set, setIndex, workout, workoutIndex, updateSet, de
             disabled={disabled}
           />
         </div>
-        {workout.exercise_category_id === 1 && (
+        {(workout.exercise_category_id === 1 || workout.exercise_category_id === 3)&& (
           <div>
             <Label htmlFor='reps' value="Reps"/>
             <TextInput

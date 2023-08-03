@@ -19,7 +19,7 @@ exports.up = function(knex) {
 exports.down = function(knex) {
   return knex.schema.alterTable('user_activity', table => {
     table.dropForeign('exercise_id')
-    table.dropForeign('user_workouts_id')
+    table.dropForeign('user_workout_id')
   })
   .then(function(){
     return knex.schema.dropTableIfExists('user_activity')

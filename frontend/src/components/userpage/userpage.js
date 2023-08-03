@@ -12,7 +12,6 @@ export default function UserPageMain({ userData, exercises, setContPlan}) {
   if (userData.length < 1 || exercises.length < 1) {
     return <p>Loading....</p>
   }
-
   return (
     <div>
       <div className="flex mt-10 gap-10 justify-center">

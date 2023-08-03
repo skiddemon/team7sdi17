@@ -4,20 +4,21 @@ import {useNavigate} from 'react-router-dom'
 import Cookies from 'js-cookie'
 
 
-export default function ContinuePlane({setContPlan}){
+export default function ContinuePlan({setContPlan}){
   const [plans, setPlans] = useState([]);
   const userid = Cookies.get('userId');
   const token = Cookies.get('token')
   const Navigate = useNavigate()
 
   const PlanCard = () => {
-    return plans.map((e) => {
+    return plans.map((e, index) => {
+      console.log(e)
       return (
-        <Card className="w-2/4">
+        <Card key={index} className="w-2/4">
           <img src={e.image} alt={e.name} width={100} height={100}/>
           {e.name}
           {e.description}
-          <Button onClick={() => {setContPlan(e); Navigate('newWorkout')}}>Continue Plan</Button>
+          <Button onClick={() => {setContPlan(e.id); Navigate('newWorkout')}}>Continue Plan</Button>
         </Card>
       )
     })

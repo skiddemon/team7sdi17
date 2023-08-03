@@ -506,7 +506,7 @@ app.get('/workoutplan/:id', async (req, res) => {
         'user_workouts.name as workout_name',
         'user_activity.id as activity_id',
         'exercises.id as exercise_id',
-        'exercises.exercise_category_id as category_id',
+        'exercises.exercise_category_id as exercise_category_id',
         'exercises.name as exercise_name',
         'user_sets.reps',
         'user_sets.weight',
@@ -529,7 +529,7 @@ app.get('/workoutplan/:id', async (req, res) => {
           activity = {
             exercise_id: current.exercise_id,
             exercise_name: current.exercise_name,
-            category_id: current.category_id,
+            exercise_category_id: current.exercise_category_id,
             sets: []
           };
           workout.activity.push(activity);
@@ -556,7 +556,7 @@ app.get('/workoutplan/:id', async (req, res) => {
 app.post('/workoutplan', async (req, res) => {
   const { workouts, user_name, user_id, name } = req.body
   const today = new Date();
-  
+
 
   const workoutToAdd = {
     name: name,
@@ -681,7 +681,8 @@ app.get('/metrics/:id', async (req, res) => {
 
 app.get('/ptTests', async (req, res) => {
   try {
-    const allPtTests = await knex('pt_tests').select('*')
+    const allPtTests = await knex('pt_tests')
+    .select('*')
     res.status(200).json(allPtTests)
   } catch (err) {
     res.status(500).json({ message: "Failed to retrieve all metrics" })
@@ -695,7 +696,7 @@ app.get('/ptTests/:id', async (req, res) => {
     const userTests = await knex('pt_tests')
       .select('*')
       .where('user_id', id)
-      .orderBy('test_date', 'desc')
+      .orderBy('test_date')
 
     res.status(200).json(userTests)
   } catch (err) {
@@ -716,9 +717,12 @@ app.get('/plans/:id', async (req, res) => {
       'recipes.id as recipe_id',
       'recipes.description as description',
       'recipes.image as image',
-      'recipes.name as plan_name'
+      'recipes.name as plan_name',
+      'workouts.id'
     )
+    .where('completed', false)
 
+    console.log(userPlan)
     const plans = userPlan.reduce((accumulator, current) => {
       let recipe = accumulator.find((e) => e.id === current.recipe_id);
       if (!recipe) {
@@ -761,8 +765,9 @@ try{
     'workouts.workout_date',
     'activity.id as activity_id',
     'exercises.id as exercise_id',
-    'exercises.exercise_category_id as category_id',
+    'exercises.exercise_category_id as exercise_category_id',
     'exercises.name as exercise_name',
+    'sets.id',
     'sets.reps',
     'sets.weight',
     'sets.distance'
@@ -786,13 +791,14 @@ try{
       activity = {
         exercise_id: current.exercise_id,
         exercise_name: current.exercise_name,
-        category_id: current.category_id,
+        exercise_category_id: current.exercise_category_id,
         sets: []
       };
       workout.activity.push(activity);
     }
 
     activity.sets.push({
+      id: current.id,
       reps: current.reps,
       weight: current.weight,
       distance: current.distance,
@@ -808,6 +814,47 @@ try{
   res.status(500).json({message: 'failed to retrieve next workout'})
 }
 
+})
+
+
+app.patch('/workout/:id', async (req, res) => {
+  const {id} = req.params
+  const {workouts} = req.body
+  const today = new Date();
+  const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  try{
+    const workoutToUpdate = {
+      completed: true,
+      workout_date: dateString
+    }
+
+    const updatedWorkout = await knex('workouts')
+    .where({id})
+    .update(workoutToUpdate)
+    .returning("*")
+
+    workouts.activity.forEach( async (e) => {
+
+      e.sets.forEach(async (e) => {
+        console.log(e.id)
+        const setToUpdate ={
+          reps: e.reps,
+          weight: e.weight,
+          distance: e.distance,
+          completed: true
+        }
+        await knex('sets')
+        .where('id', e.id)
+        .update(setToUpdate)
+      })
+    })
+
+    res.status(200).json({message: "success"})
+  }catch(err){
+    console.log(err)
+    res.status(500).json({message:"failed to patch"})
+  }
 })
 
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
