@@ -487,7 +487,49 @@ app.post('/workout', async (req, res) => {
         .insert(setToAdd)
     }))
   }))
-  res.status(200).json({ message: "success" })
+  res.status(200).json({ message: "great success" })
+
+})
+
+
+//////////////////////////////  WORKOUTPLAN ENDPOINT  /////////////////////////////
+app.post('/workoutplan', async (req, res) => {
+  const { workouts, user_name, user_id } = req.body
+  const today = new Date();
+  const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  const workoutToAdd = {
+    name: `${user_name} ${dateString}`,
+    user_id: user_id,
+    workout_date: dateString
+  }
+
+  const addedWorkout = await knex('workouts')
+    .insert(workoutToAdd)
+    .returning("*")
+
+  await Promise.all(workouts.map(async (e) => {
+    const activityToAdd = {
+      exercise_id: e.exercise_id,
+      workout_id: addedWorkout[0].id
+    }
+
+    const addedActivity = await knex('activity')
+      .insert(activityToAdd)
+      .returning("*")
+
+    await Promise.all(e.sets.map(async (i) => {
+      const setToAdd = {
+        reps: i.reps,
+        weight: i.weight,
+        distance: i.distance,
+        activity_id: addedActivity[0].id
+      }
+      await knex('sets')
+        .insert(setToAdd)
+    }))
+  }))
+  res.status(200).json({ message: "great success" })
 
 })
 //-----------------------------------------------------------------------------------------
