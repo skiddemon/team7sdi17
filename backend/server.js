@@ -510,7 +510,8 @@ app.get('/workoutplan/:id', async (req, res) => {
         'exercises.name as exercise_name',
         'user_sets.reps',
         'user_sets.weight',
-        'user_sets.distance'
+        'user_sets.distance',
+        'user_sets.completed'
       );
 
       const result = workoutHistory.reduce((accumulator, current) => {
