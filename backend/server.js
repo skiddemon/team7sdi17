@@ -506,7 +506,7 @@ app.get('/workoutplan/:id', async (req, res) => {
         'user_workouts.name as workout_name',
         'user_activity.id as activity_id',
         'exercises.id as exercise_id',
-        'exercises.exercise_category_id as category_id',
+        'exercises.exercise_category_id as exercise_category_id',
         'exercises.name as exercise_name',
         'user_sets.reps',
         'user_sets.weight',
@@ -529,7 +529,7 @@ app.get('/workoutplan/:id', async (req, res) => {
           activity = {
             exercise_id: current.exercise_id,
             exercise_name: current.exercise_name,
-            category_id: current.category_id,
+            exercise_category_id: current.exercise_category_id,
             sets: []
           };
           workout.activity.push(activity);
@@ -717,9 +717,12 @@ app.get('/plans/:id', async (req, res) => {
       'recipes.id as recipe_id',
       'recipes.description as description',
       'recipes.image as image',
-      'recipes.name as plan_name'
+      'recipes.name as plan_name',
+      'workouts.id'
     )
+    .where('completed', false)
 
+    console.log(userPlan)
     const plans = userPlan.reduce((accumulator, current) => {
       let recipe = accumulator.find((e) => e.id === current.recipe_id);
       if (!recipe) {

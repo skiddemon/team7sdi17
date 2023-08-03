@@ -36,7 +36,7 @@ export default function Set({set, setIndex, workout, workoutIndex, updateSet, de
             disabled={disabled}
           />
         </div>
-        {workout.exercise_category_id === 1 && (
+        {(workout.exercise_category_id === 1 || workout.exercise_category_id === 3)&& (
           <div>
             <Label htmlFor='reps' value="Reps"/>
             <TextInput
