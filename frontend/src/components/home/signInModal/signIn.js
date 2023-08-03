@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
 
+
 const SignIn = ({ setIsSignInModal }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -68,6 +69,7 @@ const SignIn = ({ setIsSignInModal }) => {
           </div>
         </form>
       </Card>
+   
     </div>
   )
 }

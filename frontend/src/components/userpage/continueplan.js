@@ -16,7 +16,9 @@ export default function ContinuePlan({setContPlan}){
       return (
         <Card key={index} className="w-2/4">
           <img src={e.image} alt={e.name} width={100} height={100}/>
-          {e.name}
+          {`${e.name}:   `}
+          <br></br>
+          <br></br>
           {e.description}
           <Button onClick={() => {setContPlan(e.id); Navigate('newWorkout')}}>Continue Plan</Button>
         </Card>

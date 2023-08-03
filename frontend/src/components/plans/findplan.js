@@ -32,7 +32,7 @@ export default function FindPlan(){
         }}>
           <img src={e.image} alt={e.name} width={100} height={100}/>
           <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{e.name}</h5>
-          <h5 className="text-lg text-gray-700 font-bold">Length: {e.workouts.length} Workouts</h5>
+          <h5 className="text-lg text-gray-700 font-bold">Length: {`${e.workouts.length}`} Workouts</h5>
           <p className="font-normal text-gray-700 dark:text-gray-400">{e.description}</p>
         </Card>
     )})

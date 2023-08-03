@@ -125,13 +125,13 @@ export default function DataView(){
     return <p>Loading...</p>
   }
   return (
-    <div className="flex flex-col gap-10 items-center">
-    <Card className="w-3/4">
-      <MetricsLineGraph />
-    </Card>
-    <Card className=" w-3/4">
-      <TestsLineGraph />
-    </Card>
-    </div>
+    (metrics.length > 0 && <div className="flex flex-col gap-10 items-center">
+      <Card className="w-3/4">
+        <MetricsLineGraph />
+      </Card>
+      <Card className=" w-3/4">
+        <TestsLineGraph />
+      </Card>
+    </div>)
   )
 }

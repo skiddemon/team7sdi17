@@ -5,6 +5,7 @@ import CreateAccount from './createAccountModal/createAccount.js'
 import SignIn from './signInModal/signIn.js'
 import AccountCreated from './createAccountModal/accountCreated.js'
 
+
 export default function Home() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isSignInModal, setIsSignInModal] = useState(false);
@@ -18,7 +19,7 @@ export default function Home() {
       {isCreatedModal && (<AccountCreated setIsCreatedModal={setIsCreatedModal} setIsSignInModal={setIsSignInModal} />)}
       <Card>
         <div className="flex items-center justify-between">
-          <h1 className="w-fit cursor-pointer" onClick={() => Navigate('/')}>Final Project</h1>
+          <h1 className="w-fit text-2xl font-semibold cursor-pointer" onClick={() => Navigate('/')}>Bits4Fits</h1>
           <div className="flex gap-10">
             <Button className="fit-content" onClick={() => setIsOpenModal(true)}>Create Account</Button>
             <Button className="fit-content" onClick={() => setIsSignInModal(true)}>Sign-In</Button>
