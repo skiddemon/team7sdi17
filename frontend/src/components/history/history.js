@@ -62,38 +62,6 @@ export default function History(){
 //     }
 
 
-// {name: 'Bench Press', exercise_category_id: 1},
-// {name: 'Pull Ups', exercise_category_id: 1},
-// {name: 'Lateral Raises', exercise_category_id: 1},
-// {name: 'Squats', exercise_category_id: 1},
-// {name: 'Deadlifts', exercise_category_id: 1},
-// {name: 'Arnold Presses', exercise_category_id: 1},
-// {name: 'Calf Raises', exercise_category_id: 1},
-// {name: 'Skull Crushers', exercise_category_id: 1},
-// {name: 'Barbell Curls', exercise_category_id: 1},
-// {name: 'Tricep Extensions', exercise_category_id: 1},
-// {name: 'Weighted Dips', exercise_category_id: 1},
-// {name: 'running', exercise_category_id: 2},
-// {name: 'treadmill', exercise_category_id: 2},
-// {name: 'Push-ups', exercise_category_id: 3},
-// {name: 'Box Jumps', exercise_category_id: 3}
-
-
-// push ups, 4 July 2023, 500, 5 
-// Bench Press, 4 July 2023, 500, 5 
-// Bench Press, 4 July 2023, 500, 5 
-// Bench Press, 4 July 2023, 500, 5 
-// Squats, 4 July 2023, 500, 5 
-// Squats, 4 July 2023, 500, 5 
-// Squats, 4 July 2023, 500, 5 
-// Running, 8 July 2023, 0, 0, 100 
-// Barbell Curls, 4 July 2023, 500, 5 
-// Barbell Curls, 4 July 2023, 500, 5 
-// Barbell Curls, 4 July 2023, 500, 5 
-// push ups, 4 July 2023, 500, 5 
-// push ups, 4 July 2023, 500, 5 
-// push ups, 4 July 2023, 500, 5 
-// push ups, 4 July 2023, 500, 5 
 // {userHistory.length === 0 ? <h1>Loading...</h1> :
     return (
     <>
@@ -121,46 +89,70 @@ export default function History(){
 
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
-                </Table.Cell>
-                </Table.Row>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
-                </Table.Cell>
-                </Table.Row>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
-                </Table.Cell>
-                </Table.Row>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
-                </Table.Cell>
-                </Table.Row>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
-                </Table.Cell>
-                </Table.Row>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
-                </Table.Cell>
-                </Table.Row>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
-                </Table.Cell>
-                </Table.Row>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    </Table.Cell><Table.Cell>Sliver</Table.Cell><Table.Cell>Laptop</Table.Cell><Table.Cell>$2999</Table.Cell><Table.Cell>
+                    Bench Press
+                    </Table.Cell>
+                    <Table.Cell>2023/07/04
+                        </Table.Cell><Table.Cell>12
+                            </Table.Cell><Table.Cell>500
+                                </Table.Cell><Table.Cell>
                 </Table.Cell>
                 </Table.Row>
 
+                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    Bench Press
+                    </Table.Cell>
+                    <Table.Cell>2023/07/04
+                        </Table.Cell><Table.Cell>10
+                            </Table.Cell><Table.Cell>500
+                                </Table.Cell><Table.Cell>
+                </Table.Cell>
+                </Table.Row>
+
+                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    Bench Press
+                    </Table.Cell>
+                    <Table.Cell>2023/07/04
+                        </Table.Cell><Table.Cell>4
+                            </Table.Cell><Table.Cell>500
+                                </Table.Cell><Table.Cell>
+                </Table.Cell>
+                </Table.Row>
+
+                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    Bicep Curl
+                    </Table.Cell>
+                    <Table.Cell>2023/07/04
+                        </Table.Cell><Table.Cell>4
+                            </Table.Cell><Table.Cell>100
+                                </Table.Cell><Table.Cell>
+                </Table.Cell>
+                </Table.Row>
                 
+                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    Bicep Curl
+                    </Table.Cell>
+                    <Table.Cell>2023/07/04
+                        </Table.Cell><Table.Cell>4
+                            </Table.Cell><Table.Cell>100
+                                </Table.Cell><Table.Cell>
+                </Table.Cell>
+                </Table.Row>
+                                
+                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    Running
+                    </Table.Cell>
+                    <Table.Cell>2023/07/04
+                        </Table.Cell><Table.Cell>
+                            </Table.Cell><Table.Cell>
+                                </Table.Cell><Table.Cell>100
+                </Table.Cell>
+                </Table.Row>
+
             </Table.Body>
             </Table>
         </div>

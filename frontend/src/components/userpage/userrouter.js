@@ -5,9 +5,9 @@ import { useNavigate, useParams, Route, Routes} from 'react-router-dom'
 import UserPageMain from './userpage';
 import AdminPage from '../adminpage/adminpage';
 import SMEPage from '../smepage/sme';
-import NewWorkout from './newworkout.js'
-import FindPlan from '../plans/findplan.js'
-import History from '../history/history.js'
+import NewWorkout from './newworkout.js';
+import FindPlan from '../plans/findplan.js';
+import History from '../history/history.js';
 import SavedWorkouts from './SavedWorkouts.js';
 
 
@@ -82,7 +82,7 @@ export default function UserPage() {
                 <Card>
                     <div className="flex items-center justify-between">
                         <h1 className="w-fit text-2xl font-semibold cursor-pointer" onClick={()=> {setContPlan(null);
-        setSelectedWorkout(null); Navigate(`/user/${userData[0].user_name}`)}}>Bits4Fits</h1>
+                            setSelectedWorkout(null); Navigate(`/user/${userData[0].user_name}`)}}>Bits4Fits</h1>
                         <div className="flex gap-10">
                             {userData[0].role_id === 1
                                 ?
