@@ -3,14 +3,13 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.createTable('workouts', table => {
+  return knex.schema.createTable('user_workouts', table => {
     table.increments();
     table.string('name');
     table.integer('user_id')
-    table.boolean('completed')
-    table.date('workout_date')
     table.foreign('user_id').references("users.id")
   })
+
 };
 
 /**
@@ -18,10 +17,10 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.alterTable('workouts', table => {
+  return knex.schema.alterTable('user_workouts', table => {
     table.dropForeign('user_id')
   })
   .then(function(){
-    return knex.schema.dropTableIfExists('workouts')
+    return knex.schema.dropTableIfExists('user_workouts')
   })
 };
