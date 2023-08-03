@@ -579,7 +579,8 @@ app.get('/metrics/:id', async (req, res) => {
 
 app.get('/ptTests', async (req, res) => {
   try {
-    const allPtTests = await knex('pt_tests').select('*')
+    const allPtTests = await knex('pt_tests')
+    .select('*')
     res.status(200).json(allPtTests)
   } catch (err) {
     res.status(500).json({ message: "Failed to retrieve all metrics" })
@@ -593,7 +594,7 @@ app.get('/ptTests/:id', async (req, res) => {
     const userTests = await knex('pt_tests')
       .select('*')
       .where('user_id', id)
-      .orderBy('test_date', 'desc')
+      .orderBy('test_date')
 
     res.status(200).json(userTests)
   } catch (err) {

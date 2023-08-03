@@ -11,9 +11,9 @@ export default function ContinuePlane({setContPlan}){
   const Navigate = useNavigate()
 
   const PlanCard = () => {
-    return plans.map((e) => {
+    return plans.map((e, index) => {
       return (
-        <Card className="w-2/4">
+        <Card key={index} className="w-2/4">
           <img src={e.image} alt={e.name} width={100} height={100}/>
           {e.name}
           {e.description}
