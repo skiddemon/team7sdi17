@@ -8,6 +8,7 @@ import SMEPage from '../smepage/sme';
 import NewWorkout from './newworkout.js'
 import FindPlan from '../plans/findplan.js'
 import History from '../history/history.js'
+import SavedWorkouts from './SavedWorkouts.js';
 
 
 export default function UserPage() {
@@ -16,12 +17,11 @@ export default function UserPage() {
     const [userData, setUserData] = useState([]);
     const [adminMode, setAdminMode] = useState(false);
     const [smeMode, setSmeMode] = useState(false);
-    const [contPlan, setContPlan] = useState(null)
+    const [selectedWorkout, setSelectedWorkout] = useState(null)
 
     const Navigate = useNavigate()
     const token = Cookies.get('token')
     const user = useParams().username
-
 
     const getExercises = () => {
         try {
@@ -32,14 +32,14 @@ export default function UserPage() {
                     Authorization: `Bearer ${token}`
                 }
             })
-                .then((res) => res.json())
-                .then((data) => { setExercises(data) })
-                .catch((err) => console.log(err))
+            .then((res) => res.json())
+            .then((data) => { setExercises(data) })
+            .catch((err) => console.log(err))
         } catch (err) {
             console.log('Failed')
         }
     }
-
+    
     useEffect(() => {
         if (!token) {
             Navigate('/')
@@ -80,7 +80,8 @@ export default function UserPage() {
             <header className='w-full h-20 bg-yellow-100'>
                 <Card>
                     <div className="flex items-center justify-between">
-                        <h1 className="w-fit cursor-pointer" onClick={()=>Navigate(`/user/${userData[0].user_name}`)}>Final Project</h1>
+                        <h1 className="w-fit cursor-pointer" onClick={()=> {
+        setSelectedWorkout(null); Navigate(`/user/${userData[0].user_name}`)}}>Final Project</h1>
                         <div className="flex gap-10">
                             {userData[0].role_id === 1
                                 ?
@@ -108,12 +109,13 @@ export default function UserPage() {
                 </Card>
             </header>
             <Routes>
-                <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} setContPlan={setContPlan}/>} />
+                <Route path='/' element={<UserPageMain userData={userData} exercises={exercises} />} />
                 <Route path='adminTools' element={<AdminPage />} />
                 <Route path='governator' element={<SMEPage />} />
-                <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData} contPlan={contPlan}/>} />
+                <Route path='newWorkout' element={<NewWorkout exercises={exercises} userData={userData} selectedWorkout={selectedWorkout}/>} />
                 <Route path='findPlan/*' element={<FindPlan />} />
                 <Route path='history' element={<History />} />
+                <Route path='savedworkouts' element={<SavedWorkouts setSelectedWorkout={setSelectedWorkout} />} />
             </Routes>
         </>
     )

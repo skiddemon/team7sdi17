@@ -76,4 +76,3 @@ export default function Set({set, setIndex, workout, workoutIndex, updateSet, de
   )
 
 }
-

@@ -17,8 +17,9 @@ export default function UserPageMain({ userData, exercises, setContPlan}) {
     <div>
       <div className="flex mt-10 gap-10 justify-center">
         <Button className="w-40" onClick={() => Navigate('newWorkout')}>New Workout</Button>
-        <Button className="w-40" onClick={() => Navigate('history')}>Wokout History</Button>
+        <Button className="w-40" onClick={() => Navigate('history')}>Workout History</Button>
         <Button className="w-40" onClick={() => Navigate('findPlan')}>Find Plan</Button>
+        <Button className="w-40" onClick={() => Navigate('savedworkouts')}>Saved Workouts</Button>
       </div>
       <div className="mt-10 grid grid-cols-2">
         <div>

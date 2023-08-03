@@ -8,7 +8,7 @@ exports.up = function(knex) {
     table.integer('exercise_id')
     table.foreign('exercise_id').references('exercises.id')
     table.integer('user_workout_id')
-    table.foreign('user_workout_id').references('user_workouts.id')
+    table.foreign('user_workout_id').references('user_workout.id')
   })
 };
 
