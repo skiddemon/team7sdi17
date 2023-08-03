@@ -12,103 +12,54 @@ export default function History(){
     const token = Cookies.get('token')
     const Navigate = useNavigate();
 
-    useEffect((e) => {
+    useEffect(() => {
         fetch(`http://localhost:8080/workout/history/${userid}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-    }
-})
-.then(res => res.json())
-.then(data => { setUserHistory(data)})
-}, [])
-//   "name":"old_git_chest","workout_date":"2023-07-30T07:00:00.000Z","activity":[{"exercise_name":"Bench Press","sets":[{"reps":10,"weight":100,"distance":null}]}]}
-// let exercise_name = userHistory[i].activity[0].exercise_name;
-console.log('OUTSIDE USEEFFECT',userHistory)
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {console.log(data);setUserHistory(data)})
+    }, [])
 
-function loopThroughHistory(userHistory) {
-    let tableBody = "";
-    for (let i = 0; i < userHistory.length; i++) {
-        let date = new Date(userHistory[i].workout_date).toLocaleDateString();
-        let exercise_name = userHistory[i].activity[0].exercise_name;
-        let sets = "";
-        for (let j = 0; j < userHistory[i].activity[0].sets.length; j++) {
-            let weight = userHistory[i].activity[0].sets[j].weight;
-            let reps = userHistory[i].activity[0].sets[j].reps;
-            sets += `${weight} x ${reps}, `;
+    const WorkoutCard = () => {
+        const mapSets = (sets, category) => {
+            return sets.map((e, index) => {
+                return (
+                    <div>
+                    {(category === 1 || category === 3) ? <p>{`Set ${index +1}: ${e.reps} Reps @ ${e.weight} lbs`}</p> : <p>{`Set ${index + 1}: ${e.distance} km`}</p>}
+                    </div>
+                )
+            })
         }
-        sets = sets.slice(0, -2);
-        tableBody += `
-            <Table.Body className="divide-y">
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                ${userHistory[i].ID}
-                </Table.Cell>
-                <Table.Cell>
-                ${date}
-                </Table.Cell>
-                <Table.Cell>
-                ${exercise_name}
-                </Table.Cell>
-                <Table.Cell>
-                ${sets}
-                </Table.Cell>
-            </Table.Row>
-            </Table.Body>
-        `;
+
+        const mapActivity = (activity) => {
+            return activity.map((e, index) => {
+                return (
+                    <div>
+                        <p>{e.exercise_name}</p>
+                        {mapSets(e.sets, e.category_id)}
+                    </div>
+
+                )
+            })
         }
-        return tableBody;
+
+       return userHistory.map((e, index) => {
+            console.log(e)
+           return( <Card>
+                <p>{`Exercise Name: ${e.name}`}</p>
+                {mapActivity(e.activity)}
+                </Card>
+           )
+        } )
     }
 
     return (
-    <>
-    {userHistory.length === 0 ? <Button>asdfasdf</Button> : 
-        <div alt="Workout History" className='my-8 m-auto w-full'>
-            <Table>
-            <Table.Head>
-                <Table.HeadCell>
-                WOrkout Name
-                </Table.HeadCell>
-                <Table.HeadCell>    
-                Exercise
-                </Table.HeadCell>
-                <Table.HeadCell>
-                
-                </Table.HeadCell>
-                <Table.HeadCell>
-                Price
-                </Table.HeadCell>
-                <Table.HeadCell>
-                </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    <p>{userHistory[0].ID} </p>
-                </Table.Cell>
-                <Table.Cell>
-                    Sliver
-                </Table.Cell>
-                <Table.Cell>
-                    Laptop
-                </Table.Cell>
-                <Table.Cell>
-                    $2999
-                </Table.Cell>
-                <Table.Cell>
-                    <a
-                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                    href="/tables"
-                    >
-                    </a>
-                </Table.Cell>
-                </Table.Row>
-                
-            </Table.Body>
-            </Table>
-        </div>}
-    </>
-)
+        <div className="grid md:grid-cols-3 sm:grid-cols-1 m-10 gap-5">
+         <WorkoutCard />
+        </div>
+    )
 }

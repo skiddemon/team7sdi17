@@ -52,7 +52,7 @@ export default function Set({set, setIndex, workout, workoutIndex, updateSet, de
         )}
         {workout.exercise_category_id === 2 && (
           <div>
-            <Label htmlFor='distance' value="Distance"/>
+            <Label htmlFor='distance' value="Distance (in km)"/>
             <TextInput
               id="distance"
               name="distance"

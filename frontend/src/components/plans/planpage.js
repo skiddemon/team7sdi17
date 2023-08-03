@@ -32,7 +32,7 @@ console.log(selectedPlan)
   const RenderSets = ({category, sets}) => {
     return sets.map((e, index)=>{
       console.log(category)
-      return category !== 2 ? <li>Set {index + 1}: {e.reps} Reps</li> : <li>Set {sets.length}: {Math.round((e.distance / 1.609)*100)/100} Miles</li>
+      return category !== 2 ? <li>Set {index + 1}: {e.reps} Reps</li> : <li>Set {sets.length}: {e.distance} km</li>
     })
   }
 
