@@ -15,11 +15,17 @@ export default function NewWorkout({ userData, exercises }) {
   const [openModal, setOpenModal] = useState('');
 
   const Navigate = useNavigate()
+  const today = new Date();
+  const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
 
   const submitWorkout = () => {
+    console.log('newworkout ', workouts)
     const workoutData = {
       user_id: userData[0].id,
       user_name: userData[0].user_name,
+      name:`${userData[0].user_name} ${dateString}`,
+      completed: true,
       workouts: workouts,
     }
     fetch('http://localhost:8080/workout', {

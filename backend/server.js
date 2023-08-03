@@ -330,37 +330,37 @@ app.get('/workout/history/:id', async (req, res) => {
         'sets.distance'
       );
 
-    const result = workoutHistory.reduce((accumulator, current) => {
-      let workout = accumulator.find(e => e.id === current.workout_id);
-      if (!workout) {
-        workout = {
-          ID: current.workout_id,
-          name: current.workout_name,
-          workout_date: current.workout_date,
-          activity: []
-        };
-        accumulator.push(workout);
-      }
+      const result = workoutHistory.reduce((accumulator, current) => {
+        let workout = accumulator.find(e => e.id === current.workout_id);
+        if (!workout) {
+          workout = {
+            id: current.workout_id,
+            name: current.workout_name,
+            activity: []
+          };
+          accumulator.push(workout);
+        }
 
-      let activity = workout.activity.find(e => e.exercise_id === current.exercise_id);
-      if (!activity) {
-        activity = {
-          exercise_ID: current.exercise_id,
-          exercise_name: current.exercise_name,
-          category_id: current.category_id,
-          sets: []
-        };
-        workout.activity.push(activity);
-      }
+        let activity = workout.activity.find(e => e.exercise_id === current.exercise_id);
+        if (!activity) {
+          activity = {
+            exercise_id: current.exercise_id,
+            exercise_name: current.exercise_name,
+            category_id: current.category_id,
+            sets: []
+          };
+          workout.activity.push(activity);
+        }
 
-      activity.sets.push({
-        reps: current.reps,
-        weight: current.weight,
-        distance: current.distance
-      });
+        activity.sets.push({
+          reps: current.reps,
+          weight: current.weight,
+          distance: current.distance,
+          completed: current.completed
+        });
 
-      return accumulator;
-    }, []);
+        return accumulator;
+        }, [])
 
     res.status(200).json(result);
   } catch (err) {
@@ -389,7 +389,8 @@ app.get('/plans', async (req, res) => {
         'exercises.name as exercise_name',
         'sets_plan.reps',
         'sets_plan.weight',
-        'sets_plan.distance'
+        'sets_plan.distance',
+        'sets_plan.completed'
       );
 
     const result = recipes.reduce((accumulator, current) => {
@@ -429,7 +430,8 @@ app.get('/plans', async (req, res) => {
       activity.sets.push({
         reps: current.reps,
         weight: current.weight,
-        distance: current.distance
+        distance: current.distance,
+        completed: current.completed
       });
 
       return accumulator;
@@ -445,13 +447,16 @@ app.get('/plans', async (req, res) => {
 
 
 app.post('/workout', async (req, res) => {
-  const { workouts, user_name, user_id } = req.body
+  const { workouts, user_name, user_id, name, completed, recipe_id} = req.body
+
   const today = new Date();
   const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   const workoutToAdd = {
-    name: `${user_name} ${dateString}`,
+    name: name,
     user_id: user_id,
+    completed: completed,
+    recipe_id: recipe_id,
     workout_date: dateString
   }
 
@@ -470,10 +475,12 @@ app.post('/workout', async (req, res) => {
       .returning("*")
 
     await Promise.all(e.sets.map(async (i) => {
+      console.log(i)
       const setToAdd = {
         reps: i.reps,
         weight: i.weight,
         distance: i.distance,
+        completed: i.completed,
         activity_id: addedActivity[0].id
       }
       await knex('sets')
@@ -638,71 +645,109 @@ app.get('/ptTests/:id', async (req, res) => {
 
 
 
+app.get('/plans/:id', async (req, res) => {
+  const {id} = req.params
+  console.log(id)
+  try{
+    const userPlan = await knex('recipes')
+    .join('workouts', 'recipes.id', 'workouts.recipe_id')
+    .where('workouts.user_id', id)
+    .select(
+      'recipes.id as recipe_id',
+      'recipes.description as description',
+      'recipes.image as image',
+      'recipes.name as plan_name'
+    )
+
+    const plans = userPlan.reduce((accumulator, current) => {
+      let recipe = accumulator.find((e) => e.id === current.recipe_id);
+      if (!recipe) {
+        recipe = {
+          id: current.recipe_id,
+          name: current.plan_name,
+          description: current.description,
+          image: current.image
+        };
+        accumulator.push(recipe);
+      }
+      return accumulator
+    }, [])
 
 
-// app.post('//logs/:id', async (req, res) => {
-//   const { exercise_id, sets, reps, distance, weight, split, comments, user_id} = req.body;
-//   console.log(req.body)
-//   const newLog = {
-//     exercise_id: exercise_log.exercise_id,
-//     sets: exercise_log.sets,
-//     reps: exercise_log.reps,
-//     distance: exercise_log.distance,
-//     weight: exercise_log.weight,
-//     split: exercise_log.split,
-//     comments: exercise_log.comments,
-//     user_id: exercise_log.user_id
-//   }
+    res.status(200).json(plans)
+  }catch(err){
+    console.log(err)
+    res.status(500).json({message: 'Failed to retrieve plans'})
+  }
+})
 
-//   try {
-//     console.log('do we even get this far?')
-//     const addedLogResponse = await knex('logs')
-//       .insert(newLog)
-//       .returning('*')
+app.get('/nextWorkout/:id', async (req, res) => {
+  const {id} = req.params;
+try{
+  const workoutId = await knex('workouts')
+  .select("id")
+  .where('workouts.recipe_id', id)
+  .where('workouts.completed', false)
+  .first()
 
-//     console.log('log response: ', addedLogResponse)
-//     res.status(201).json(addedLogResponse)
-//   } catch (err) {
-//     res.status(500).json(err.message)
-// }
-//////////////////////// set_reps ROUTE/////////////////////////
-app.get('/set_reps', async (req, res) => {
-  const specificUserId = req.body.user_id
-  console.log(req.body.user_id)
 
-  console.log(`set_reps'${specificUserId}' has logs`)
-  if (req.body.user_id === specificUserId) {
-    try {
-      const userLogs = await knex.select('*').from('set_reps')
-      res.status(201).json(userLogs)
-    } catch (err) {
-      res.status(500).json({ message: 'Failed to retrieve set_reps.' })
+  const workout = await knex('workouts')
+  .join('activity', 'workouts.id', 'activity.workout_id')
+  .join('exercises', 'activity.exercise_id', 'exercises.id')
+  .join('sets', 'activity.id', 'sets.activity_id')
+  .select(
+    'workouts.id as workout_id',
+    'workouts.name as workout_name',
+    'workouts.workout_date',
+    'activity.id as activity_id',
+    'exercises.id as exercise_id',
+    'exercises.exercise_category_id as category_id',
+    'exercises.name as exercise_name',
+    'sets.reps',
+    'sets.weight',
+    'sets.distance'
+          )
+  .where("workouts.id", workoutId.id)
+
+
+  const result = workout.reduce((accumulator, current) => {
+    let workout = accumulator.find(e => e.id === current.workout_id);
+    if (!workout) {
+      workout = {
+        id: current.workout_id,
+        name: current.workout_name,
+        activity: []
+      };
+      accumulator.push(workout);
     }
-  } else {
-    res.status(500).json({ message: 'Failed' })
-  }
-});
 
-app.post('/set_reps', async (req, res) => {
-  const { name, sets, reps } = req.body;
-  console.log(req.body)
-  const newSetRep = {
-    name: name,
-    sets: sets,
-    reps: reps,
-  }
+    let activity = workout.activity.find(e => e.exercise_id === current.exercise_id);
+    if (!activity) {
+      activity = {
+        exercise_id: current.exercise_id,
+        exercise_name: current.exercise_name,
+        category_id: current.category_id,
+        sets: []
+      };
+      workout.activity.push(activity);
+    }
 
-  try {
-    console.log('do we even get this far?')
-    const addedLogResponse = await knex('set_reps')
-      .insert(newSetRep)
-      .returning('*')
+    activity.sets.push({
+      reps: current.reps,
+      weight: current.weight,
+      distance: current.distance,
+      completed: current.completed
+    });
 
-    console.log('log response: ', addedLogResponse)
-    res.status(201).json(addedLogResponse)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
+    return accumulator;
+    }, [])
+
+  res.status(200).json(result)
+}catch(err){
+  console.log(err)
+  res.status(500).json({message: 'failed to retrieve next workout'})
+}
+
 })
 
 //////////////////////// LISTEN FOR THE ABOVE ROUTES ///////////////////////////////
