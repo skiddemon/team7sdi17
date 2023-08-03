@@ -9,6 +9,8 @@ import NewWorkout from './newworkout.js'
 import FindPlan from '../plans/findplan.js'
 import History from '../history/history.js'
 import SavedWorkouts from './SavedWorkouts.js';
+import Logo from '../../imageComponent.js'
+
 
 
 export default function UserPage() {
@@ -81,6 +83,7 @@ export default function UserPage() {
             <header className='w-full h-20 bg-yellow-100'>
                 <Card>
                     <div className="flex items-center justify-between">
+                        <Logo />
                         <h1 className="w-fit cursor-pointer" onClick={()=> {setContPlan(null);
         setSelectedWorkout(null); Navigate(`/user/${userData[0].user_name}`)}}>Final Project</h1>
                         <div className="flex gap-10">
