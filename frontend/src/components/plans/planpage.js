@@ -6,8 +6,9 @@ export default function PlanPage({selectedPlan}){
   const username = Cookies.get("user_name")
   const Navigate = useNavigate();
   const userId = Cookies.get("userId")
-
+console.log(selectedPlan)
   const submitWorkout = () => {
+
     selectedPlan.workouts.forEach((e) => {
       console.log(selectedPlan)
       const workoutData = {

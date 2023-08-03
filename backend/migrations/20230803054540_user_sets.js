@@ -3,14 +3,14 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.createTable('sets_plan', table => {
+  return knex.schema.createTable('user_sets', table => {
     table.increments();
     table.integer('reps').nullable();
     table.integer('weight').nullable();
     table.integer('distance').nullable();
     table.boolean('completed')
-    table.integer('activity_plan_id')
-    table.foreign('activity_plan_id').references('activity_plan.id')
+    table.integer('user_activity_id')
+    table.foreign('user_activity_id').references('user_activity.id')
   })
 };
 
@@ -19,10 +19,10 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.alterTable('sets_plan', table => {
-    table.dropForeign('activity_plan_id');
+  return knex.schema.alterTable('user_sets', table => {
+    table.dropForeign('user_activity_id');
   })
   .then(function(){
-    return knex.schema.dropTableIfExists('sets_plan')
+    return knex.schema.dropTableIfExists('user_sets')
   })
 };

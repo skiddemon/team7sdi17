@@ -8,6 +8,7 @@ exports.up = function(knex) {
     table.integer('reps').nullable();
     table.integer('weight').nullable();
     table.integer('distance').nullable();
+    table.boolean('completed')
     table.integer('activity_id')
     table.foreign('activity_id').references('activity.id')
   })

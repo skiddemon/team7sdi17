@@ -60,7 +60,6 @@ export default function UserPage() {
                     })
                     .then(data => {
                         setUserData(data)
-                        console.log(data);
                         Cookies.set('userId', data[0].id)
                         Cookies.set('user_name', data[0].user_name)
                         getExercises();

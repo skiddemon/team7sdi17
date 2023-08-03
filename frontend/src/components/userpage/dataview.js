@@ -29,7 +29,7 @@ export default function DataView(){
       }
   })
   .then(res => res.json())
-  .then(data => {console.log(data); setTests(data)})
+  .then(data => setTests(data))
   .then(() => setLoading(false))
   }
 
@@ -42,7 +42,7 @@ export default function DataView(){
       }
   })
   .then(res => res.json())
-  .then(data => {console.log(data); setMetrics(data)})
+  .then(data => setMetrics(data))
   .then(() => retrieveTests())
   }, [])
 
@@ -90,7 +90,6 @@ export default function DataView(){
 
     const dates = tests.map((e) => e.test_date);
     const scores = tests.map((e) => e.score);
-    console.log(scores)
     const data = {
       labels: dates,
       datasets: [
@@ -126,11 +125,11 @@ export default function DataView(){
     return <p>Loading...</p>
   }
   return (
-    <div className="flex flex-col gap-10">
-    <Card className="w-1/2 ml-5">
+    <div className="flex flex-col gap-10 items-center">
+    <Card className="w-3/4">
       <MetricsLineGraph />
     </Card>
-    <Card className="w-1/2 ml-5">
+    <Card className=" w-3/4">
       <TestsLineGraph />
     </Card>
     </div>
