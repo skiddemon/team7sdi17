@@ -321,6 +321,7 @@ app.get('/workout/history/:id', async (req, res) => {
         'workouts.id as workout_id',
         'workouts.name as workout_name',
         'workouts.workout_date',
+        'workouts.completed',
         'activity.id as activity_id',
         'exercises.id as exercise_id',
         'exercises.exercise_category_id as category_id',
@@ -328,7 +329,9 @@ app.get('/workout/history/:id', async (req, res) => {
         'sets.reps',
         'sets.weight',
         'sets.distance'
-      );
+      )
+      .where('workouts.completed', true)
+
 
       const result = workoutHistory.reduce((accumulator, current) => {
         let workout = accumulator.find(e => e.id === current.workout_id);

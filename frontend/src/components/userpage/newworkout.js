@@ -215,9 +215,7 @@ export default function NewWorkout({ userData, exercises, selectedWorkout, contP
           <List alt="exercise list" />
         </Dropdown>
         <Button disabled={!submitWorkoutButton} onClick={() => submit()}>Log Workout</Button>
-        {/* louis */}
         {submitWorkoutButton ? <Button onClick={() => handleCreateWorkout()} className="w-fit" alt="Delete this Exercise and Sets">Save As Workout Template</Button> : ''}
-        {/* /louis  */}
       </div>
       <div className="flex flex-col items-center mt-10 gap-5">
         {workouts.length > 0 && (
@@ -227,7 +225,7 @@ export default function NewWorkout({ userData, exercises, selectedWorkout, contP
 
       <div id='saveWorkoutModal'>
         <Modal show={openModal === 'default'} onClose={() => setOpenModal(undefined)} className=''>
-          <ModalHeader>New Workout:</ModalHeader>
+          <ModalHeader>Save New Workout:</ModalHeader>
           <ModalBody>
             <TextInput
               className='mb-3'
@@ -238,23 +236,6 @@ export default function NewWorkout({ userData, exercises, selectedWorkout, contP
               type="text"
               required
             ></TextInput>
-            <Textarea
-              className='mb-3 text-sm'
-              id="workoutPlanDesc"
-              value={workoutPlanDescription}
-              onChange={(e) => setWorkoutPlanDescription(e.target.value)}
-              placeholder="Description"
-              type="text"
-              required
-            ></Textarea>
-            <Textarea
-              className='mb-3 text-sm'
-              id="workoutPlanImg"
-              value={workoutImage}
-              onChange={(e) => setWorkoutImage(e.target.value)}
-              placeholder="Image Link (Optional)"
-              type="text"
-            ></Textarea>
             <Button onClick={() => postWorkoutPlan()} className="w-fit " >Save and Log Workout</Button>
           </ModalBody>
         </Modal>
@@ -264,9 +245,3 @@ export default function NewWorkout({ userData, exercises, selectedWorkout, contP
 
   )
 }
-
-
-
-
-
-

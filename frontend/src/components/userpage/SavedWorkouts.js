@@ -16,7 +16,7 @@ useEffect(() => {
     fetch(`http://localhost:8080/workoutplan/${userid}`)
     .then(res => res.json())
     .then(data => {console.log(data); setWorkoutList(data)})
-    
+
 }, [])
 
 const WorkoutMapper = () => {
@@ -28,7 +28,7 @@ const WorkoutMapper = () => {
     }
     return workoutList.map((workout) => {
         return (
-            <Card onClick={() => {setSelectedWorkout(workout); Navigate('../newWorkout')}}>
+            <Card className="w-1/4" onClick={() => {setSelectedWorkout(workout); Navigate('../newWorkout')}}>
                 {workout.name}
                 {activitiesMapper(workout.activity)}
             </Card>
@@ -37,7 +37,9 @@ const WorkoutMapper = () => {
 }
 
     return (
-        <WorkoutMapper />
+        <div className="flex justify-center mt-10">
+            <WorkoutMapper />
+        </div>
 
     )
 }
